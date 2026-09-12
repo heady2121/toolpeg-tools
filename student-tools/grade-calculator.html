@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Grade Calculator &mdash; Weighted Grade Calculator | Toolpeg</title>
+<meta name="description" content="Calculate your overall course grade from weighted categories like homework, exams and participation.">
+<link rel="canonical" href="https://toolpegtools.vercel.app/student-tools/grade-calculator.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Final Grade Calculator &mdash; Weighted Grade Calculator | Toolpeg">
+<meta property="og:description" content="Calculate your overall course grade from weighted categories like homework, exams and participation.">
+<meta property="og:url" content="https://toolpegtools.vercel.app/student-tools/grade-calculator.html">
+<meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+      <nav class="main-nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="../image-tools/index.html">Image Tools</a>
+      <a href="../pdf-tools/index.html">PDF Tools</a>
+      <a href="../student-tools/index.html" class="active">Student Tools</a>
+      <a href="../qr-tools/index.html">QR Tools</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="status-strip">
+    <div class="wrap"><span class="led" aria-hidden="true"></span>Runs entirely in your browser &middot; files are never uploaded &middot; free, no sign-up</div>
+  </div>
+
+<main class="tool-shell">
+  <div class="wrap">
+    <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Student Tools</a> / Final Grade Calculator</p>
+    <div class="tool-head">
+      <span class="tag">Grades</span>
+    <h1>Final Grade Calculator</h1>
+    <p>Enter each grading category weight and your score to get your overall weighted grade.</p>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="panel">
+          <div id="rows"></div>
+          <button class="btn btn-outline" id="add-row" style="margin-top:6px">+ Add category</button>
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <div class="result-box">
+            <span class="label">Weighted final grade</span>
+            <div class="big" id="grade-out">0.00%</div>
+            <div class="sub" id="weight-out"></div>
+          </div>
+          <p class="note">Weight and score are both percentages. If your weights don't add up to 100%, the result is still normalized correctly by the total weight you've entered.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <section class="section tool-extra-section">
+    <div class="wrap">
+      <div class="prose" style="max-width:720px">
+        <h2 style="margin-top:0">About this tool</h2>
+        <p>Most courses weight different types of work differently — exams might count more than homework. Enter each category's weight and your score in it to get your overall weighted grade.</p>
+      </div>
+      <div class="how-it-works">
+        <h2>How it works</h2>
+        <ol class="steps-list">
+            <li>Add a row for each grading category (e.g. Homework, Midterm, Final).</li>
+            <li>Enter the weight (%) and your score (%) for each.</li>
+            <li>Your weighted final grade updates automatically.</li>
+        </ol>
+      </div>
+      <div class="faq-block">
+        <h2>Frequently asked questions</h2>
+          <div class="faq-item"><h3>What if my weights don't add up to 100%?</h3><p>The calculator still works — it normalizes by the total weight you've entered — but for an accurate result your weights should match your syllabus.</p></div>
+          <div class="faq-item"><h3>Can I use this to see what I need on a final exam?</h3><p>Yes — set the final exam's category to a target score and see what overall grade results, or try a few scores to see what you'd need.</p></div>
+      </div>
+      <div class="ad-slot" aria-hidden="true">
+        <span>Ad space</span>
+        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
+      </div>
+    </div>
+  </section>
+  <section class="section" style="border-top:1px solid var(--hairline)">
+    <div class="wrap">
+      <div class="section-head"><h2>Related tools</h2></div>
+      <div class="tool-grid">
+<a class="peg-card" href="gpa-calculator.html" data-name="gpa calculator grades add courses, credits and letter grades to get your semester gpa.">
+        <span class="tag">Grades</span>
+        <h3>GPA Calculator</h3>
+        <p>Add courses, credits and letter grades to get your semester GPA.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="cgpa-calculator.html" data-name="cgpa calculator grades combine multiple semesters' gpa and credits into one cumulative cgpa.">
+        <span class="tag">Grades</span>
+        <h3>CGPA Calculator</h3>
+        <p>Combine multiple semesters' GPA and credits into one cumulative CGPA.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="percentage-calculator.html" data-name="percentage calculator grades work out what percent a score is, or what score hits a target percent.">
+        <span class="tag">Grades</span>
+        <h3>Percentage Calculator</h3>
+        <p>Work out what percent a score is, or what score hits a target percent.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="attendance-calculator.html" data-name="attendance calculator grades check your attendance percentage and how many classes you can still miss.">
+        <span class="tag">Grades</span>
+        <h3>Attendance Calculator</h3>
+        <p>Check your attendance percentage and how many classes you can still miss.</p>
+        <span class="go">Open tool</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+          <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
+        </div>
+      <div>
+        <h4>Image Tools</h4>
+        <a href="../image-tools/jpg-to-png.html">JPG to PNG</a>
+        <a href="../image-tools/png-to-jpg.html">PNG to JPG</a>
+        <a href="../image-tools/jpg-to-webp.html">JPG to WebP</a>
+        <a href="../image-tools/webp-to-jpg.html">WebP to JPG</a>
+        <a href="../image-tools/png-to-webp.html">PNG to WebP</a>
+        <a href="../image-tools/image-compressor.html">Image Compressor</a>
+        <a href="../image-tools/image-resizer.html">Image Resizer</a>
+        <a href="../image-tools/image-cropper.html">Image Cropper</a>
+      </div>
+      <div>
+        <h4>PDF Tools</h4>
+        <a href="../pdf-tools/pdf-to-jpg.html">PDF to JPG</a>
+        <a href="../pdf-tools/jpg-to-pdf.html">JPG to PDF</a>
+        <a href="../pdf-tools/merge-pdf.html">Merge PDF</a>
+        <a href="../pdf-tools/split-pdf.html">Split PDF</a>
+        <a href="../pdf-tools/compress-pdf.html">Compress PDF</a>
+      </div>
+      <div>
+        <h4>Student &amp; QR</h4>
+        <a href="../student-tools/gpa-calculator.html">GPA Calculator</a>
+        <a href="../student-tools/cgpa-calculator.html">CGPA Calculator</a>
+        <a href="../student-tools/percentage-calculator.html">Percentage Calculator</a>
+        <a href="../student-tools/grade-calculator.html">Final Grade Calculator</a>
+        <a href="../student-tools/attendance-calculator.html">Attendance Calculator</a>
+        <a href="../student-tools/age-calculator.html">Age Calculator</a>
+        <a href="../student-tools/standard-deviation-calculator.html">Standard Deviation Calculator</a>
+        <a href="../student-tools/scientific-calculator.html">Scientific Calculator</a>
+        <a href="../qr-tools/qr-code-generator.html">QR Code Generator</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="../about.html">About</a>
+        <a href="../guides/index.html">Guides</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms of Use</a>
+      </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
+        <a href="../privacy-policy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="../js/main.js"></script>
+<script>
+(function(){
+  const rowsEl = document.getElementById('rows');
+  const addBtn = document.getElementById('add-row');
+  const gradeOut = document.getElementById('grade-out');
+  const weightOut = document.getElementById('weight-out');
+
+  function addRow(name, weight, score) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.style.marginBottom = '10px';
+    row.innerHTML = `
+      <div class="field" style="margin-bottom:0;flex:2">
+        <input type="text" placeholder="Category (e.g. Homework)" class="cat-name" value="${name || ''}">
+      </div>
+      <div class="field" style="margin-bottom:0;flex:1;min-width:90px">
+        <input type="number" placeholder="Weight %" min="0" max="100" step="1" class="cat-weight" value="${weight !== undefined ? weight : ''}">
+      </div>
+      <div class="field" style="margin-bottom:0;flex:1;min-width:90px">
+        <input type="number" placeholder="Score %" min="0" max="100" step="1" class="cat-score" value="${score !== undefined ? score : ''}">
+      </div>
+      <button class="btn btn-outline remove-row" style="flex:0 0 auto;padding:11px 14px">&times;</button>
+    `;
+    rowsEl.appendChild(row);
+    row.querySelector('.remove-row').addEventListener('click', () => { row.remove(); calc(); });
+    row.querySelectorAll('input').forEach(el => el.addEventListener('input', calc));
+  }
+
+  function calc() {
+    let weightedSum = 0, totalWeight = 0;
+    rowsEl.querySelectorAll('.row').forEach(row => {
+      const weight = parseFloat(row.querySelector('.cat-weight').value) || 0;
+      const score = parseFloat(row.querySelector('.cat-score').value) || 0;
+      weightedSum += weight * score;
+      totalWeight += weight;
+    });
+    gradeOut.textContent = totalWeight ? (weightedSum / totalWeight).toFixed(2) + '%' : '0.00%';
+    weightOut.textContent = 'total weight entered: ' + totalWeight + '%';
+  }
+
+  addBtn.addEventListener('click', () => addRow());
+  addRow('Homework', 20, 90);
+  addRow('Midterm', 30, 82);
+  addRow('Final Exam', 50, 88);
+  calc();
+})();
+</script>
+</body>
+</html>

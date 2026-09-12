@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Split PDF &mdash; Extract or Split PDF Pages Free | Toolpeg</title>
+<meta name="description" content="Extract a page range from a PDF, or split every page into its own file, free and in your browser.">
+<link rel="canonical" href="https://toolpegtools.vercel.app/pdf-tools/split-pdf.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Split PDF &mdash; Extract or Split PDF Pages Free | Toolpeg">
+<meta property="og:description" content="Extract a page range from a PDF, or split every page into its own file, free and in your browser.">
+<meta property="og:url" content="https://toolpegtools.vercel.app/pdf-tools/split-pdf.html">
+<meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+      <nav class="main-nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="../image-tools/index.html">Image Tools</a>
+      <a href="../pdf-tools/index.html" class="active">PDF Tools</a>
+      <a href="../student-tools/index.html">Student Tools</a>
+      <a href="../qr-tools/index.html">QR Tools</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="status-strip">
+    <div class="wrap"><span class="led" aria-hidden="true"></span>Runs entirely in your browser &middot; files are never uploaded &middot; free, no sign-up</div>
+  </div>
+
+<main class="tool-shell">
+  <div class="wrap">
+    <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">PDF Tools</a> / Split PDF</p>
+    <div class="tool-head">
+      <span class="tag">Split</span>
+    <h1>Split PDF</h1>
+    <p>Pull specific pages out of a PDF, or split every page into its own file.</p>
+    </div>
+    <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+      <h3>Drop a PDF here, or click to browse</h3>
+      <p>PDF &middot; processed on your device</p>
+    </div>
+    <input type="file" id="file-input" accept="application/pdf" hidden>
+    <div id="error" class="error-box"></div>
+    <div id="options-wrap" style="display:none;margin-top:18px" class="grid-2">
+      <div class="panel">
+        <div class="field">
+          <label id="page-count-label">Loaded PDF</label>
+          <div id="page-count" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)"></div>
+        </div>
+        <div class="field">
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="range">Extract a page range</option>
+            <option value="each">Split into single-page files</option>
+          </select>
+        </div>
+        <div class="row" id="range-fields">
+          <div class="field"><label for="from">From page</label><input type="number" id="from" min="1" value="1"></div>
+          <div class="field"><label for="to">To page</label><input type="number" id="to" min="1" value="1"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <button class="btn btn-signal btn-block" id="split-btn">Split &amp; download</button>
+        <p class="note">"Split into single-page files" downloads one PDF per page, one after another.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <section class="section tool-extra-section">
+    <div class="wrap">
+      <div class="prose" style="max-width:720px">
+        <h2 style="margin-top:0">About this tool</h2>
+        <p>Pull a specific range of pages out of a longer PDF, or break every page into its own file — handy for sharing just one chapter or section without sending the whole document.</p>
+      </div>
+      <div class="how-it-works">
+        <h2>How it works</h2>
+        <ol class="steps-list">
+            <li>Drop a PDF file.</li>
+            <li>Choose a page range, or split into single pages.</li>
+            <li>Download the result.</li>
+        </ol>
+      </div>
+      <div class="faq-block">
+        <h2>Frequently asked questions</h2>
+          <div class="faq-item"><h3>Does this reduce file size?</h3><p>Splitting reduces size roughly in proportion to how many pages you extract, since it's separating pages rather than compressing them.</p></div>
+          <div class="faq-item"><h3>Can I extract multiple separate ranges at once?</h3><p>Not in a single pass currently — run the tool again for a second range.</p></div>
+      </div>
+      <div class="ad-slot" aria-hidden="true">
+        <span>Ad space</span>
+        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
+      </div>
+    </div>
+  </section>
+  <section class="section" style="border-top:1px solid var(--hairline)">
+    <div class="wrap">
+      <div class="section-head"><h2>Related tools</h2></div>
+      <div class="tool-grid">
+<a class="peg-card" href="pdf-to-jpg.html" data-name="pdf to jpg convert turn every page of a pdf into a downloadable jpg image.">
+        <span class="tag">Convert</span>
+        <h3>PDF to JPG</h3>
+        <p>Turn every page of a PDF into a downloadable JPG image.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="jpg-to-pdf.html" data-name="jpg to pdf convert combine one or more jpg/png photos into a single pdf document.">
+        <span class="tag">Convert</span>
+        <h3>JPG to PDF</h3>
+        <p>Combine one or more JPG/PNG photos into a single PDF document.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="merge-pdf.html" data-name="merge pdf combine stack multiple pdfs into one file, in the order you choose.">
+        <span class="tag">Combine</span>
+        <h3>Merge PDF</h3>
+        <p>Stack multiple PDFs into one file, in the order you choose.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="compress-pdf.html" data-name="compress pdf optimize shrink a pdf's file size by re-rendering pages at a quality you choose.">
+        <span class="tag">Optimize</span>
+        <h3>Compress PDF</h3>
+        <p>Shrink a PDF's file size by re-rendering pages at a quality you choose.</p>
+        <span class="go">Open tool</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+          <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
+        </div>
+      <div>
+        <h4>Image Tools</h4>
+        <a href="../image-tools/jpg-to-png.html">JPG to PNG</a>
+        <a href="../image-tools/png-to-jpg.html">PNG to JPG</a>
+        <a href="../image-tools/jpg-to-webp.html">JPG to WebP</a>
+        <a href="../image-tools/webp-to-jpg.html">WebP to JPG</a>
+        <a href="../image-tools/png-to-webp.html">PNG to WebP</a>
+        <a href="../image-tools/image-compressor.html">Image Compressor</a>
+        <a href="../image-tools/image-resizer.html">Image Resizer</a>
+        <a href="../image-tools/image-cropper.html">Image Cropper</a>
+      </div>
+      <div>
+        <h4>PDF Tools</h4>
+        <a href="../pdf-tools/pdf-to-jpg.html">PDF to JPG</a>
+        <a href="../pdf-tools/jpg-to-pdf.html">JPG to PDF</a>
+        <a href="../pdf-tools/merge-pdf.html">Merge PDF</a>
+        <a href="../pdf-tools/split-pdf.html">Split PDF</a>
+        <a href="../pdf-tools/compress-pdf.html">Compress PDF</a>
+      </div>
+      <div>
+        <h4>Student &amp; QR</h4>
+        <a href="../student-tools/gpa-calculator.html">GPA Calculator</a>
+        <a href="../student-tools/cgpa-calculator.html">CGPA Calculator</a>
+        <a href="../student-tools/percentage-calculator.html">Percentage Calculator</a>
+        <a href="../student-tools/grade-calculator.html">Final Grade Calculator</a>
+        <a href="../student-tools/attendance-calculator.html">Attendance Calculator</a>
+        <a href="../student-tools/age-calculator.html">Age Calculator</a>
+        <a href="../student-tools/standard-deviation-calculator.html">Standard Deviation Calculator</a>
+        <a href="../student-tools/scientific-calculator.html">Scientific Calculator</a>
+        <a href="../qr-tools/qr-code-generator.html">QR Code Generator</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="../about.html">About</a>
+        <a href="../guides/index.html">Guides</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms of Use</a>
+      </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
+        <a href="../privacy-policy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="../js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="../js/file-utils.js"></script>
+<script>
+(function(){
+  const dz = document.getElementById('dz');
+  const input = document.getElementById('file-input');
+  const err = document.getElementById('error');
+  const optionsWrap = document.getElementById('options-wrap');
+  const pageCount = document.getElementById('page-count');
+  const mode = document.getElementById('mode');
+  const rangeFields = document.getElementById('range-fields');
+  const fromEl = document.getElementById('from');
+  const toEl = document.getElementById('to');
+  const splitBtn = document.getElementById('split-btn');
+  let currentFile = null, totalPages = 0;
+
+  mode.addEventListener('change', () => { rangeFields.style.display = mode.value === 'range' ? 'flex' : 'none'; });
+
+  setupDropzone(dz, input, async (files) => {
+    hideError(err);
+    const file = files[0];
+    if (file.type !== 'application/pdf') { showError(err, 'Please choose a PDF file.'); return; }
+    if (!window.PDFLib) { showError(err, "Couldn't load the PDF engine. Check your connection and try again."); return; }
+    try {
+      currentFile = file;
+      const bytes = await file.arrayBuffer();
+      const doc = await PDFLib.PDFDocument.load(bytes);
+      totalPages = doc.getPageCount();
+      pageCount.textContent = file.name + '  \u00b7  ' + totalPages + ' page(s)';
+      fromEl.max = totalPages; toEl.max = totalPages; toEl.value = totalPages;
+      optionsWrap.style.display = 'grid';
+    } catch (e) {
+      showError(err, 'Could not read that PDF: ' + e.message);
+    }
+  });
+
+  splitBtn.addEventListener('click', async () => {
+    if (!currentFile) return;
+    splitBtn.disabled = true;
+    splitBtn.textContent = 'Splitting\u2026';
+    try {
+      const bytes = await currentFile.arrayBuffer();
+      const baseName = stripExt(currentFile.name);
+      if (mode.value === 'range') {
+        const from = Math.max(1, Math.min(totalPages, Number(fromEl.value) || 1));
+        const to = Math.max(from, Math.min(totalPages, Number(toEl.value) || totalPages));
+        const src = await PDFLib.PDFDocument.load(bytes);
+        const out = await PDFLib.PDFDocument.create();
+        const indices = [];
+        for (let i = from - 1; i <= to - 1; i++) indices.push(i);
+        const pages = await out.copyPages(src, indices);
+        pages.forEach(p => out.addPage(p));
+        const outBytes = await out.save();
+        downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), baseName + '-p' + from + '-' + to + '.pdf');
+      } else {
+        for (let i = 0; i < totalPages; i++) {
+          const src = await PDFLib.PDFDocument.load(bytes);
+          const out = await PDFLib.PDFDocument.create();
+          const [page] = await out.copyPages(src, [i]);
+          out.addPage(page);
+          const outBytes = await out.save();
+          downloadBlob(new Blob([outBytes], { type: 'application/pdf' }), baseName + '-page-' + (i + 1) + '.pdf');
+          await new Promise(r => setTimeout(r, 250));
+        }
+      }
+    } catch (e) {
+      showError(err, 'Could not split that PDF: ' + e.message);
+    } finally {
+      splitBtn.disabled = false;
+      splitBtn.textContent = 'Split & download';
+    }
+  });
+})();
+</script>
+</body>
+</html>

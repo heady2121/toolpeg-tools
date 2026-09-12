@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPA Calculator &mdash; Free Semester GPA Calculator | Toolpeg</title>
+<meta name="description" content="Calculate your semester GPA by entering course credits and letter grades. Supports 4.0 and 4.3 scales.">
+<link rel="canonical" href="https://toolpegtools.vercel.app/student-tools/gpa-calculator.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GPA Calculator &mdash; Free Semester GPA Calculator | Toolpeg">
+<meta property="og:description" content="Calculate your semester GPA by entering course credits and letter grades. Supports 4.0 and 4.3 scales.">
+<meta property="og:url" content="https://toolpegtools.vercel.app/student-tools/gpa-calculator.html">
+<meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+      <nav class="main-nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="../image-tools/index.html">Image Tools</a>
+      <a href="../pdf-tools/index.html">PDF Tools</a>
+      <a href="../student-tools/index.html" class="active">Student Tools</a>
+      <a href="../qr-tools/index.html">QR Tools</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="status-strip">
+    <div class="wrap"><span class="led" aria-hidden="true"></span>Runs entirely in your browser &middot; files are never uploaded &middot; free, no sign-up</div>
+  </div>
+
+<main class="tool-shell">
+  <div class="wrap">
+    <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Student Tools</a> / GPA Calculator</p>
+    <div class="tool-head">
+      <span class="tag">Grades</span>
+    <h1>GPA Calculator</h1>
+    <p>Add each course with its credit hours and letter grade to get your semester GPA on a standard 4.0 scale.</p>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="panel">
+          <div id="rows"></div>
+          <button class="btn btn-outline" id="add-row" style="margin-top:6px">+ Add course</button>
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <div class="field">
+            <label for="scale">Grading scale</label>
+            <select id="scale">
+              <option value="4">4.0 scale (A=4.0)</option>
+              <option value="4.3">4.3 scale (A+=4.3)</option>
+            </select>
+          </div>
+          <div class="result-box">
+            <span class="label">Semester GPA</span>
+            <div class="big" id="gpa-out">0.00</div>
+            <div class="sub" id="credits-out">0 total credit hours</div>
+          </div>
+          <p class="note">Grade points: A/A+ = 4.0&ndash;4.3, A- = 3.7, B+ = 3.3, B = 3.0, B- = 2.7, C+ = 2.3, C = 2.0, C- = 1.7, D+ = 1.3, D = 1.0, F = 0.0. Adjust to match your institution's exact scale if it differs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <section class="section tool-extra-section">
+    <div class="wrap">
+      <div class="prose" style="max-width:720px">
+        <h2 style="margin-top:0">About this tool</h2>
+        <p>Add each course you're taking with its credit hours and letter grade to see your GPA for the term update instantly, on a standard 4.0 or 4.3 scale.</p>
+      </div>
+      <div class="how-it-works">
+        <h2>How it works</h2>
+        <ol class="steps-list">
+            <li>Add a row for each course.</li>
+            <li>Set its credit hours and letter grade.</li>
+            <li>Your GPA updates automatically as you type.</li>
+        </ol>
+      </div>
+      <div class="faq-block">
+        <h2>Frequently asked questions</h2>
+          <div class="faq-item"><h3>Which grading scale should I choose?</h3><p>Most US colleges use a 4.0 scale where an A is worth 4.0. Some use a 4.3 scale where an A+ is worth 4.3 — check your institution's catalog if you're unsure.</p></div>
+          <div class="faq-item"><h3>Does this match my school's exact GPA calculation?</h3><p>It uses the standard grade-point mapping, but some schools weight certain courses (like honors or AP classes) differently — check with your registrar for anything official.</p></div>
+      </div>
+      <div class="ad-slot" aria-hidden="true">
+        <span>Ad space</span>
+        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
+      </div>
+    </div>
+  </section>
+  <section class="section" style="border-top:1px solid var(--hairline)">
+    <div class="wrap">
+      <div class="section-head"><h2>Related tools</h2></div>
+      <div class="tool-grid">
+<a class="peg-card" href="cgpa-calculator.html" data-name="cgpa calculator grades combine multiple semesters' gpa and credits into one cumulative cgpa.">
+        <span class="tag">Grades</span>
+        <h3>CGPA Calculator</h3>
+        <p>Combine multiple semesters' GPA and credits into one cumulative CGPA.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="percentage-calculator.html" data-name="percentage calculator grades work out what percent a score is, or what score hits a target percent.">
+        <span class="tag">Grades</span>
+        <h3>Percentage Calculator</h3>
+        <p>Work out what percent a score is, or what score hits a target percent.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="grade-calculator.html" data-name="final grade calculator grades work out your overall grade from weighted categories like exams and homework.">
+        <span class="tag">Grades</span>
+        <h3>Final Grade Calculator</h3>
+        <p>Work out your overall grade from weighted categories like exams and homework.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="attendance-calculator.html" data-name="attendance calculator grades check your attendance percentage and how many classes you can still miss.">
+        <span class="tag">Grades</span>
+        <h3>Attendance Calculator</h3>
+        <p>Check your attendance percentage and how many classes you can still miss.</p>
+        <span class="go">Open tool</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+          <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
+        </div>
+      <div>
+        <h4>Image Tools</h4>
+        <a href="../image-tools/jpg-to-png.html">JPG to PNG</a>
+        <a href="../image-tools/png-to-jpg.html">PNG to JPG</a>
+        <a href="../image-tools/jpg-to-webp.html">JPG to WebP</a>
+        <a href="../image-tools/webp-to-jpg.html">WebP to JPG</a>
+        <a href="../image-tools/png-to-webp.html">PNG to WebP</a>
+        <a href="../image-tools/image-compressor.html">Image Compressor</a>
+        <a href="../image-tools/image-resizer.html">Image Resizer</a>
+        <a href="../image-tools/image-cropper.html">Image Cropper</a>
+      </div>
+      <div>
+        <h4>PDF Tools</h4>
+        <a href="../pdf-tools/pdf-to-jpg.html">PDF to JPG</a>
+        <a href="../pdf-tools/jpg-to-pdf.html">JPG to PDF</a>
+        <a href="../pdf-tools/merge-pdf.html">Merge PDF</a>
+        <a href="../pdf-tools/split-pdf.html">Split PDF</a>
+        <a href="../pdf-tools/compress-pdf.html">Compress PDF</a>
+      </div>
+      <div>
+        <h4>Student &amp; QR</h4>
+        <a href="../student-tools/gpa-calculator.html">GPA Calculator</a>
+        <a href="../student-tools/cgpa-calculator.html">CGPA Calculator</a>
+        <a href="../student-tools/percentage-calculator.html">Percentage Calculator</a>
+        <a href="../student-tools/grade-calculator.html">Final Grade Calculator</a>
+        <a href="../student-tools/attendance-calculator.html">Attendance Calculator</a>
+        <a href="../student-tools/age-calculator.html">Age Calculator</a>
+        <a href="../student-tools/standard-deviation-calculator.html">Standard Deviation Calculator</a>
+        <a href="../student-tools/scientific-calculator.html">Scientific Calculator</a>
+        <a href="../qr-tools/qr-code-generator.html">QR Code Generator</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="../about.html">About</a>
+        <a href="../guides/index.html">Guides</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms of Use</a>
+      </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
+        <a href="../privacy-policy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="../js/main.js"></script>
+<script>
+(function(){
+  const rowsEl = document.getElementById('rows');
+  const addBtn = document.getElementById('add-row');
+  const scaleEl = document.getElementById('scale');
+  const gpaOut = document.getElementById('gpa-out');
+  const creditsOut = document.getElementById('credits-out');
+
+  const GRADES_4 = { 'A':4.0,'A-':3.7,'B+':3.3,'B':3.0,'B-':2.7,'C+':2.3,'C':2.0,'C-':1.7,'D+':1.3,'D':1.0,'D-':0.7,'F':0.0 };
+  const GRADES_43 = Object.assign({}, GRADES_4, { 'A+':4.3 });
+
+  function gradeOptions(map) {
+    return Object.keys(map).map(g => `<option value="${g}">${g}</option>`).join('');
+  }
+
+  function addRow(name, credits, grade) {
+    const map = scaleEl.value === '4.3' ? GRADES_43 : GRADES_4;
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.style.marginBottom = '10px';
+    row.innerHTML = `
+      <div class="field" style="margin-bottom:0;flex:2">
+        <input type="text" placeholder="Course name" class="course-name" value="${name || ''}">
+      </div>
+      <div class="field" style="margin-bottom:0;flex:1;min-width:90px">
+        <input type="number" placeholder="Credits" min="0" step="0.5" class="course-credits" value="${credits || 3}">
+      </div>
+      <div class="field" style="margin-bottom:0;flex:1;min-width:90px">
+        <select class="course-grade">${gradeOptions(map)}</select>
+      </div>
+      <button class="btn btn-outline remove-row" style="flex:0 0 auto;padding:11px 14px">&times;</button>
+    `;
+    rowsEl.appendChild(row);
+    if (grade) row.querySelector('.course-grade').value = grade;
+    row.querySelector('.remove-row').addEventListener('click', () => { row.remove(); calc(); });
+    row.querySelectorAll('input,select').forEach(el => el.addEventListener('input', calc));
+  }
+
+  function calc() {
+    const map = scaleEl.value === '4.3' ? GRADES_43 : GRADES_4;
+    let totalPoints = 0, totalCredits = 0;
+    rowsEl.querySelectorAll('.row').forEach(row => {
+      const credits = parseFloat(row.querySelector('.course-credits').value) || 0;
+      const grade = row.querySelector('.course-grade').value;
+      const points = map[grade] !== undefined ? map[grade] : 0;
+      totalPoints += credits * points;
+      totalCredits += credits;
+    });
+    gpaOut.textContent = totalCredits ? (totalPoints / totalCredits).toFixed(2) : '0.00';
+    creditsOut.textContent = totalCredits + ' total credit hours';
+  }
+
+  scaleEl.addEventListener('change', () => {
+    document.querySelectorAll('.course-grade').forEach(sel => {
+      const cur = sel.value;
+      const map = scaleEl.value === '4.3' ? GRADES_43 : GRADES_4;
+      sel.innerHTML = gradeOptions(map);
+      if (map[cur] !== undefined) sel.value = cur;
+    });
+    calc();
+  });
+
+  addBtn.addEventListener('click', () => addRow());
+  addRow('', 3, 'A');
+  addRow('', 3, 'B+');
+  addRow('', 3, 'A-');
+  calc();
+})();
+</script>
+</body>
+</html>

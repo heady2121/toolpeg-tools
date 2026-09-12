@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compress PDF &mdash; Shrink PDF File Size Free | Toolpeg</title>
+<meta name="description" content="Shrink a PDF's file size by re-rendering its pages at a quality you choose. Best for scanned and image-heavy PDFs.">
+<link rel="canonical" href="https://toolpegtools.vercel.app/pdf-tools/compress-pdf.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Compress PDF &mdash; Shrink PDF File Size Free | Toolpeg">
+<meta property="og:description" content="Shrink a PDF's file size by re-rendering its pages at a quality you choose. Best for scanned and image-heavy PDFs.">
+<meta property="og:url" content="https://toolpegtools.vercel.app/pdf-tools/compress-pdf.html">
+<meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+      <nav class="main-nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="../image-tools/index.html">Image Tools</a>
+      <a href="../pdf-tools/index.html" class="active">PDF Tools</a>
+      <a href="../student-tools/index.html">Student Tools</a>
+      <a href="../qr-tools/index.html">QR Tools</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="status-strip">
+    <div class="wrap"><span class="led" aria-hidden="true"></span>Runs entirely in your browser &middot; files are never uploaded &middot; free, no sign-up</div>
+  </div>
+
+<main class="tool-shell">
+  <div class="wrap">
+    <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">PDF Tools</a> / Compress PDF</p>
+    <div class="tool-head">
+      <span class="tag">Optimize</span>
+    <h1>Compress PDF</h1>
+    <p>Shrink a PDF by re-rendering its pages at a quality you choose.</p>
+    </div>
+    <div class="error-box show" style="background:#F6FBFA;border-color:var(--circuit-tint-line);color:var(--circuit-dark)">
+      <strong>How this works:</strong> each page is re-rendered as an image and reassembled into a new PDF. This gets scanned and photo-heavy PDFs much smaller, but the output's text is no longer selectable or searchable. For a text document you need to keep searchable, this isn't the right tool.
+    </div>
+    <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload PDF" style="margin-top:18px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+      <h3>Drop a PDF here, or click to browse</h3>
+      <p>PDF &middot; processed on your device</p>
+    </div>
+    <input type="file" id="file-input" accept="application/pdf" hidden>
+    <div id="error" class="error-box"></div>
+    <div id="options-wrap" style="display:none;margin-top:18px" class="grid-2">
+      <div class="panel">
+        <div class="field">
+          <label>Loaded PDF</label>
+          <div id="file-info" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)"></div>
+        </div>
+        <div class="field">
+          <label for="level">Compression level</label>
+          <select id="level">
+            <option value="high">Smallest file (lower quality)</option>
+            <option value="balanced" selected>Balanced</option>
+            <option value="low">Best quality (larger file)</option>
+          </select>
+        </div>
+      </div>
+      <div class="panel">
+        <button class="btn btn-signal btn-block" id="compress-btn">Compress &amp; download</button>
+        <div id="status" style="display:none;margin-top:14px">
+          <div class="progress"><i id="bar"></i></div>
+          <p class="note" id="status-text"></p>
+        </div>
+        <div class="result-box" id="result-box" style="display:none;margin-top:14px">
+          <span class="label">New size</span>
+          <div class="big" id="new-size">&mdash;</div>
+          <div class="sub" id="size-sub"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <section class="section tool-extra-section">
+    <div class="wrap">
+      <div class="prose" style="max-width:720px">
+        <h2 style="margin-top:0">About this tool</h2>
+        <p>This compressor rebuilds your PDF by rendering each page as an image at a quality and resolution you control, then reassembling them into a new PDF. It works especially well on scanned documents and image-heavy PDFs. Because pages become images, text in the output is no longer selectable or searchable — for text documents where that matters, this isn't the right tool.</p>
+      </div>
+      <div class="how-it-works">
+        <h2>How it works</h2>
+        <ol class="steps-list">
+            <li>Drop a PDF file.</li>
+            <li>Choose a quality level.</li>
+            <li>Compress and download the smaller PDF.</li>
+        </ol>
+      </div>
+      <div class="faq-block">
+        <h2>Frequently asked questions</h2>
+          <div class="faq-item"><h3>Will the text still be selectable afterward?</h3><p>No — each page becomes an image, so text can no longer be selected, searched or copied. That trade-off is what makes the size reduction possible.</p></div>
+          <div class="faq-item"><h3>What kind of PDFs does this work best on?</h3><p>Scanned documents, photo-heavy PDFs, and anything where pages are already essentially images. For text-heavy PDFs you need to keep searchable, this isn't the right tool.</p></div>
+      </div>
+      <div class="ad-slot" aria-hidden="true">
+        <span>Ad space</span>
+        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
+      </div>
+    </div>
+  </section>
+  <section class="section" style="border-top:1px solid var(--hairline)">
+    <div class="wrap">
+      <div class="section-head"><h2>Related tools</h2></div>
+      <div class="tool-grid">
+<a class="peg-card" href="pdf-to-jpg.html" data-name="pdf to jpg convert turn every page of a pdf into a downloadable jpg image.">
+        <span class="tag">Convert</span>
+        <h3>PDF to JPG</h3>
+        <p>Turn every page of a PDF into a downloadable JPG image.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="jpg-to-pdf.html" data-name="jpg to pdf convert combine one or more jpg/png photos into a single pdf document.">
+        <span class="tag">Convert</span>
+        <h3>JPG to PDF</h3>
+        <p>Combine one or more JPG/PNG photos into a single PDF document.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="merge-pdf.html" data-name="merge pdf combine stack multiple pdfs into one file, in the order you choose.">
+        <span class="tag">Combine</span>
+        <h3>Merge PDF</h3>
+        <p>Stack multiple PDFs into one file, in the order you choose.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="split-pdf.html" data-name="split pdf split pull specific pages out of a pdf, or split it into single pages.">
+        <span class="tag">Split</span>
+        <h3>Split PDF</h3>
+        <p>Pull specific pages out of a PDF, or split it into single pages.</p>
+        <span class="go">Open tool</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+          <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
+        </div>
+      <div>
+        <h4>Image Tools</h4>
+        <a href="../image-tools/jpg-to-png.html">JPG to PNG</a>
+        <a href="../image-tools/png-to-jpg.html">PNG to JPG</a>
+        <a href="../image-tools/jpg-to-webp.html">JPG to WebP</a>
+        <a href="../image-tools/webp-to-jpg.html">WebP to JPG</a>
+        <a href="../image-tools/png-to-webp.html">PNG to WebP</a>
+        <a href="../image-tools/image-compressor.html">Image Compressor</a>
+        <a href="../image-tools/image-resizer.html">Image Resizer</a>
+        <a href="../image-tools/image-cropper.html">Image Cropper</a>
+      </div>
+      <div>
+        <h4>PDF Tools</h4>
+        <a href="../pdf-tools/pdf-to-jpg.html">PDF to JPG</a>
+        <a href="../pdf-tools/jpg-to-pdf.html">JPG to PDF</a>
+        <a href="../pdf-tools/merge-pdf.html">Merge PDF</a>
+        <a href="../pdf-tools/split-pdf.html">Split PDF</a>
+        <a href="../pdf-tools/compress-pdf.html">Compress PDF</a>
+      </div>
+      <div>
+        <h4>Student &amp; QR</h4>
+        <a href="../student-tools/gpa-calculator.html">GPA Calculator</a>
+        <a href="../student-tools/cgpa-calculator.html">CGPA Calculator</a>
+        <a href="../student-tools/percentage-calculator.html">Percentage Calculator</a>
+        <a href="../student-tools/grade-calculator.html">Final Grade Calculator</a>
+        <a href="../student-tools/attendance-calculator.html">Attendance Calculator</a>
+        <a href="../student-tools/age-calculator.html">Age Calculator</a>
+        <a href="../student-tools/standard-deviation-calculator.html">Standard Deviation Calculator</a>
+        <a href="../student-tools/scientific-calculator.html">Scientific Calculator</a>
+        <a href="../qr-tools/qr-code-generator.html">QR Code Generator</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="../about.html">About</a>
+        <a href="../guides/index.html">Guides</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms of Use</a>
+      </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
+        <a href="../privacy-policy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="../js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>if(window["pdfjsLib"]){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../js/file-utils.js"></script>
+<script>
+(function(){
+  const dz = document.getElementById('dz');
+  const input = document.getElementById('file-input');
+  const err = document.getElementById('error');
+  const optionsWrap = document.getElementById('options-wrap');
+  const fileInfo = document.getElementById('file-info');
+  const level = document.getElementById('level');
+  const compressBtn = document.getElementById('compress-btn');
+  const status = document.getElementById('status');
+  const bar = document.getElementById('bar');
+  const statusText = document.getElementById('status-text');
+  const resultBox = document.getElementById('result-box');
+  const newSize = document.getElementById('new-size');
+  const sizeSub = document.getElementById('size-sub');
+  let currentFile = null;
+
+  const LEVELS = {
+    high: { scale: 1.0, quality: 0.5 },
+    balanced: { scale: 1.5, quality: 0.7 },
+    low: { scale: 2.0, quality: 0.85 },
+  };
+
+  setupDropzone(dz, input, async (files) => {
+    hideError(err);
+    const file = files[0];
+    if (file.type !== 'application/pdf') { showError(err, 'Please choose a PDF file.'); return; }
+    if (!window.pdfjsLib || !window.jspdf) { showError(err, "Couldn't load the PDF engine. Check your connection and try again."); return; }
+    currentFile = file;
+    fileInfo.textContent = file.name + '  \u00b7  ' + humanFileSize(file.size);
+    optionsWrap.style.display = 'grid';
+    resultBox.style.display = 'none';
+  });
+
+  compressBtn.addEventListener('click', async () => {
+    if (!currentFile) return;
+    hideError(err);
+    compressBtn.disabled = true;
+    status.style.display = 'block';
+    resultBox.style.display = 'none';
+    statusText.textContent = 'Reading PDF\u2026';
+    bar.style.width = '5%';
+    try {
+      const { scale, quality } = LEVELS[level.value];
+      const buf = await currentFile.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      const { jsPDF } = window.jspdf;
+      let doc = null;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        statusText.textContent = 'Compressing page ' + i + ' of ' + pdf.numPages + '\u2026';
+        bar.style.width = Math.round((i / pdf.numPages) * 100) + '%';
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width; canvas.height = viewport.height;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        const wPt = viewport.width / scale;
+        const hPt = viewport.height / scale;
+        const orientation = wPt > hPt ? 'l' : 'p';
+        if (!doc) doc = new jsPDF({ orientation, unit: 'pt', format: [wPt, hPt] });
+        else doc.addPage([wPt, hPt], orientation);
+        doc.addImage(dataUrl, 'JPEG', 0, 0, wPt, hPt);
+      }
+      const outBytes = doc.output('arraybuffer');
+      const blob = new Blob([outBytes], { type: 'application/pdf' });
+      const pct = Math.round((1 - blob.size / currentFile.size) * 100);
+      newSize.textContent = humanFileSize(blob.size);
+      sizeSub.textContent = pct > 0 ? ('about ' + pct + '% smaller than the original ' + humanFileSize(currentFile.size)) : ('original was ' + humanFileSize(currentFile.size));
+      resultBox.style.display = 'block';
+      downloadBlob(blob, stripExt(currentFile.name) + '-compressed.pdf');
+      statusText.textContent = 'Done.';
+    } catch (e) {
+      showError(err, 'Could not compress that PDF: ' + e.message);
+    } finally {
+      compressBtn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

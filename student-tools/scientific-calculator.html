@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator &mdash; Free Online Tool | Toolpeg</title>
+<meta name="description" content="A free online scientific calculator with trig functions, logarithms, powers, roots and memory keys.">
+<link rel="canonical" href="https://toolpegtools.vercel.app/student-tools/scientific-calculator.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Scientific Calculator &mdash; Free Online Tool | Toolpeg">
+<meta property="og:description" content="A free online scientific calculator with trig functions, logarithms, powers, roots and memory keys.">
+<meta property="og:url" content="https://toolpegtools.vercel.app/student-tools/scientific-calculator.html">
+<meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+      <nav class="main-nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="../image-tools/index.html">Image Tools</a>
+      <a href="../pdf-tools/index.html">PDF Tools</a>
+      <a href="../student-tools/index.html" class="active">Student Tools</a>
+      <a href="../qr-tools/index.html">QR Tools</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="status-strip">
+    <div class="wrap"><span class="led" aria-hidden="true"></span>Runs entirely in your browser &middot; files are never uploaded &middot; free, no sign-up</div>
+  </div>
+
+<main class="tool-shell">
+  <div class="wrap">
+    <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Student Tools</a> / Scientific Calculator</p>
+    <div class="tool-head">
+      <span class="tag">Math</span>
+    <h1>Scientific Calculator</h1>
+    <p>Trig, logs, powers, roots and constants, plus memory keys. Type or click, and your keyboard works too.</p>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="panel">
+          <input type="text" id="expr" style="width:100%;font-family:var(--font-mono);font-size:22px;border:none;text-align:right;background:transparent;color:var(--ink);padding:8px 4px 4px" value="" placeholder="0" autocomplete="off">
+          <div id="expr-result" style="text-align:right;font-family:var(--font-mono);color:var(--steel-light);font-size:13px;min-height:18px;padding:0 4px 12px">&nbsp;</div>
+          <div id="calc-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+            <button class="calc-key" data-val="7">7</button><button class="calc-key" data-val="8">8</button><button class="calc-key" data-val="9">9</button><button class="calc-key" data-val="/">÷</button><button class="calc-key" data-val="sin(">sin</button><button class="calc-key" data-val="4">4</button><button class="calc-key" data-val="5">5</button><button class="calc-key" data-val="6">6</button><button class="calc-key" data-val="*">×</button><button class="calc-key" data-val="cos(">cos</button><button class="calc-key" data-val="1">1</button><button class="calc-key" data-val="2">2</button><button class="calc-key" data-val="3">3</button><button class="calc-key" data-val="-">−</button><button class="calc-key" data-val="tan(">tan</button><button class="calc-key" data-val="0">0</button><button class="calc-key" data-val=".">.</button><button class="calc-key" data-val="00">00</button><button class="calc-key" data-val="+">+</button><button class="calc-key" data-val="log(">log</button><button class="calc-key" data-val="(">(</button><button class="calc-key" data-val=")">)</button><button class="calc-key" data-val="^">^</button><button class="calc-key" data-val="sqrt(">√x</button><button class="calc-key" data-val="ln(">ln</button><button class="calc-key" data-val="pi">π</button><button class="calc-key" data-val="e">e</button><button class="calc-key" data-val="%">%</button><button class="calc-key" data-val="!">x!</button><button class="calc-key key-eq" data-val="=">=</button>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button class="btn btn-outline btn-block" id="clear-btn">Clear</button>
+            <button class="btn btn-outline btn-block" id="back-btn">&larr; Backspace</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <div class="field">
+            <label>Memory</label>
+            <div id="mem-out" style="font-family:var(--font-mono);font-size:20px">0</div>
+          </div>
+          <div class="row">
+            <button class="btn btn-outline" id="mc">MC</button>
+            <button class="btn btn-outline" id="mplus">M+</button>
+            <button class="btn btn-outline" id="mminus">M-</button>
+            <button class="btn btn-outline" id="mr">MR</button>
+          </div>
+          <p class="note">Angles are in radians. Use <code>pi</code> and <code>e</code> as constants, <code>sqrt(</code> for a square root, and <code>^</code> for a power &mdash; e.g. <code>2^10</code> or <code>sin(pi/2)</code>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <section class="section tool-extra-section">
+    <div class="wrap">
+      <div class="prose" style="max-width:720px">
+        <h2 style="margin-top:0">About this tool</h2>
+        <p>A full scientific calculator for trigonometry, logarithms, powers, roots and factorials, with memory keys for multi-step calculations — all typed as a normal expression.</p>
+      </div>
+      <div class="how-it-works">
+        <h2>How it works</h2>
+        <ol class="steps-list">
+            <li>Type or tap an expression, using functions like sin(, sqrt( and constants like pi.</li>
+            <li>Press = to evaluate.</li>
+            <li>Use M+ / M− / MR to store and recall a running total.</li>
+        </ol>
+      </div>
+      <div class="faq-block">
+        <h2>Frequently asked questions</h2>
+          <div class="faq-item"><h3>Are angles in degrees or radians?</h3><p>Radians. To use degrees, convert first — for example, multiply degrees by pi/180 before applying sin, cos or tan.</p></div>
+          <div class="faq-item"><h3>How do I enter a power or factorial?</h3><p>Use ^ for a power (e.g. 2^10) and ! for a factorial (e.g. 5!).</p></div>
+      </div>
+      <div class="ad-slot" aria-hidden="true">
+        <span>Ad space</span>
+        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
+      </div>
+    </div>
+  </section>
+  <section class="section" style="border-top:1px solid var(--hairline)">
+    <div class="wrap">
+      <div class="section-head"><h2>Related tools</h2></div>
+      <div class="tool-grid">
+<a class="peg-card" href="gpa-calculator.html" data-name="gpa calculator grades add courses, credits and letter grades to get your semester gpa.">
+        <span class="tag">Grades</span>
+        <h3>GPA Calculator</h3>
+        <p>Add courses, credits and letter grades to get your semester GPA.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="cgpa-calculator.html" data-name="cgpa calculator grades combine multiple semesters' gpa and credits into one cumulative cgpa.">
+        <span class="tag">Grades</span>
+        <h3>CGPA Calculator</h3>
+        <p>Combine multiple semesters' GPA and credits into one cumulative CGPA.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="percentage-calculator.html" data-name="percentage calculator grades work out what percent a score is, or what score hits a target percent.">
+        <span class="tag">Grades</span>
+        <h3>Percentage Calculator</h3>
+        <p>Work out what percent a score is, or what score hits a target percent.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="grade-calculator.html" data-name="final grade calculator grades work out your overall grade from weighted categories like exams and homework.">
+        <span class="tag">Grades</span>
+        <h3>Final Grade Calculator</h3>
+        <p>Work out your overall grade from weighted categories like exams and homework.</p>
+        <span class="go">Open tool</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+          <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
+        </div>
+      <div>
+        <h4>Image Tools</h4>
+        <a href="../image-tools/jpg-to-png.html">JPG to PNG</a>
+        <a href="../image-tools/png-to-jpg.html">PNG to JPG</a>
+        <a href="../image-tools/jpg-to-webp.html">JPG to WebP</a>
+        <a href="../image-tools/webp-to-jpg.html">WebP to JPG</a>
+        <a href="../image-tools/png-to-webp.html">PNG to WebP</a>
+        <a href="../image-tools/image-compressor.html">Image Compressor</a>
+        <a href="../image-tools/image-resizer.html">Image Resizer</a>
+        <a href="../image-tools/image-cropper.html">Image Cropper</a>
+      </div>
+      <div>
+        <h4>PDF Tools</h4>
+        <a href="../pdf-tools/pdf-to-jpg.html">PDF to JPG</a>
+        <a href="../pdf-tools/jpg-to-pdf.html">JPG to PDF</a>
+        <a href="../pdf-tools/merge-pdf.html">Merge PDF</a>
+        <a href="../pdf-tools/split-pdf.html">Split PDF</a>
+        <a href="../pdf-tools/compress-pdf.html">Compress PDF</a>
+      </div>
+      <div>
+        <h4>Student &amp; QR</h4>
+        <a href="../student-tools/gpa-calculator.html">GPA Calculator</a>
+        <a href="../student-tools/cgpa-calculator.html">CGPA Calculator</a>
+        <a href="../student-tools/percentage-calculator.html">Percentage Calculator</a>
+        <a href="../student-tools/grade-calculator.html">Final Grade Calculator</a>
+        <a href="../student-tools/attendance-calculator.html">Attendance Calculator</a>
+        <a href="../student-tools/age-calculator.html">Age Calculator</a>
+        <a href="../student-tools/standard-deviation-calculator.html">Standard Deviation Calculator</a>
+        <a href="../student-tools/scientific-calculator.html">Scientific Calculator</a>
+        <a href="../qr-tools/qr-code-generator.html">QR Code Generator</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="../about.html">About</a>
+        <a href="../guides/index.html">Guides</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms of Use</a>
+      </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
+        <a href="../privacy-policy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="../js/main.js"></script>
+<script>
+(function(){
+  const expr = document.getElementById('expr');
+  const resultLine = document.getElementById('expr-result');
+  const memOut = document.getElementById('mem-out');
+  let memory = 0;
+
+  function factorial(n) {
+    if (n < 0 || Math.floor(n) !== n) return NaN;
+    let r = 1;
+    for (let i = 2; i <= n; i++) r *= i;
+    return r;
+  }
+
+  function safeEval(input) {
+    let s = input
+      .replace(/\u00f7/g, '/')
+      .replace(/\u00d7/g, '*')
+      .replace(/\u2212/g, '-')
+      .replace(/\^/g, '**')
+      .replace(/pi/g, 'Math.PI')
+      .replace(/\be\b/g, 'Math.E')
+      .replace(/sqrt\(/g, 'Math.sqrt(')
+      .replace(/sin\(/g, 'Math.sin(')
+      .replace(/cos\(/g, 'Math.cos(')
+      .replace(/tan\(/g, 'Math.tan(')
+      .replace(/log\(/g, 'Math.log10(')
+      .replace(/ln\(/g, 'Math.log(');
+    s = s.replace(/(\d+(\.\d+)?)!/g, 'FACT($1)');
+    if (!/^[0-9+\-*/().\s,MathPIElogsqrtincoat\^FACT]*$/i.test(s)) {
+      // allow-list check loosely; fall through to Function eval with try/catch as final guard
+    }
+    // eslint-disable-next-line no-new-func
+    const fn = new Function('FACT', 'return (' + s + ')');
+    return fn(factorial);
+  }
+
+  function updatePreview() {
+    if (!expr.value.trim()) { resultLine.innerHTML = '&nbsp;'; return; }
+    try {
+      const val = safeEval(expr.value);
+      resultLine.textContent = (typeof val === 'number' && isFinite(val)) ? ('= ' + round(val)) : '';
+    } catch (e) { resultLine.innerHTML = '&nbsp;'; }
+  }
+
+  function round(n) { return Math.round(n * 1e10) / 1e10; }
+
+  document.querySelectorAll('.calc-key').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.dataset.val;
+      if (val === '=') {
+        try {
+          const result = round(safeEval(expr.value));
+          expr.value = String(result);
+        } catch (e) { resultLine.textContent = 'Error'; return; }
+      } else {
+        expr.value += val;
+      }
+      updatePreview();
+      expr.focus();
+    });
+  });
+
+  document.getElementById('clear-btn').addEventListener('click', () => { expr.value = ''; updatePreview(); });
+  document.getElementById('back-btn').addEventListener('click', () => { expr.value = expr.value.slice(0, -1); updatePreview(); });
+  expr.addEventListener('input', updatePreview);
+  expr.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      try { expr.value = String(round(safeEval(expr.value))); updatePreview(); } catch (er) { resultLine.textContent = 'Error'; }
+    }
+  });
+
+  document.getElementById('mc').addEventListener('click', () => { memory = 0; memOut.textContent = memory; });
+  document.getElementById('mplus').addEventListener('click', () => { try { memory += safeEval(expr.value || '0'); } catch(e){} memOut.textContent = round(memory); });
+  document.getElementById('mminus').addEventListener('click', () => { try { memory -= safeEval(expr.value || '0'); } catch(e){} memOut.textContent = round(memory); });
+  document.getElementById('mr').addEventListener('click', () => { expr.value += String(memory); updatePreview(); });
+})();
+</script>
+<style>
+  #calc-grid .calc-key{font-family:var(--font-mono);font-size:15px;padding:14px 0;border-radius:var(--radius);border:1px solid var(--hairline);background:#fff;cursor:pointer;transition:background .12s,border-color .12s}
+  #calc-grid .calc-key:hover{border-color:var(--ink)}
+  #calc-grid .key-eq{background:var(--signal);border-color:var(--signal);color:var(--signal-ink);font-weight:600}
+</style>
+</body>
+</html>

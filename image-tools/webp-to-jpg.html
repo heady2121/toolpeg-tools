@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebP to JPG Converter &mdash; Free Online Converter | Toolpeg</title>
+<meta name="description" content="Convert a WebP image to widely-supported JPG format for free, right in your browser.">
+<link rel="canonical" href="https://toolpegtools.vercel.app/image-tools/webp-to-jpg.html">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="WebP to JPG Converter &mdash; Free Online Converter | Toolpeg">
+<meta property="og:description" content="Convert a WebP image to widely-supported JPG format for free, right in your browser.">
+<meta property="og:url" content="https://toolpegtools.vercel.app/image-tools/webp-to-jpg.html">
+<meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+      <nav class="main-nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="../image-tools/index.html" class="active">Image Tools</a>
+      <a href="../pdf-tools/index.html">PDF Tools</a>
+      <a href="../student-tools/index.html">Student Tools</a>
+      <a href="../qr-tools/index.html">QR Tools</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="status-strip">
+    <div class="wrap"><span class="led" aria-hidden="true"></span>Runs entirely in your browser &middot; files are never uploaded &middot; free, no sign-up</div>
+  </div>
+
+<main class="tool-shell">
+  <div class="wrap">
+    <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Image Tools</a> / WebP to JPG Converter</p>
+    <div class="tool-head">
+      <span class="tag">Convert</span>
+    <h1>WebP to JPG Converter</h1>
+    <p>Convert a WebP image to widely-supported JPG format for free, right in your browser.</p>
+    </div>
+    
+    <div class="grid-2">
+      <div>
+        <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+          <h3>Drop a WebP here, or click to browse</h3>
+          <p>IMAGE/WEBP &middot; processed on your device</p>
+        </div>
+        <input type="file" id="file-input" accept="image/webp" hidden>
+        <div id="error" class="error-box"></div>
+        <div id="preview-wrap" style="display:none;margin-top:18px">
+          <img id="preview" alt="Preview" style="border:1px solid var(--hairline);border-radius:6px;max-height:320px;width:auto;margin:0 auto">
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <div class="field">
+            <label>Selected file</label>
+            <div id="file-info" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)">No file yet</div>
+          </div>
+          <div class="field">
+            <label for="quality">Output quality &mdash; <span id="qval">92</span>%</label>
+            <input type="range" id="quality" min="40" max="100" value="92">
+          </div>
+          <button class="btn btn-signal btn-block" id="convert-btn" disabled>Convert to JPG</button>
+          <p class="note">Your image is decoded and re-encoded locally using the browser's canvas &mdash; it's never uploaded anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <section class="section tool-extra-section">
+    <div class="wrap">
+      <div class="prose" style="max-width:720px">
+        <h2 style="margin-top:0">About this tool</h2>
+        <p>Some older software, printers and upload forms still expect JPG rather than WebP. This tool converts a WebP image to JPG locally, so you can use it anywhere JPG is required.</p>
+      </div>
+      <div class="how-it-works">
+        <h2>How it works</h2>
+        <ol class="steps-list">
+            <li>Drop or select a WebP file.</li>
+            <li>It's decoded right in your browser.</li>
+            <li>Convert and download as JPG.</li>
+        </ol>
+      </div>
+      <div class="faq-block">
+        <h2>Frequently asked questions</h2>
+          <div class="faq-item"><h3>Does this work with animated WebP files?</h3><p>No — only the first frame of an animated WebP will be converted, since JPG doesn't support animation.</p></div>
+          <div class="faq-item"><h3>Will I lose quality converting WebP to JPG?</h3><p>There's a small amount of additional compression loss, which is normal any time you convert between two lossy formats.</p></div>
+      </div>
+      <div class="ad-slot" aria-hidden="true">
+        <span>Ad space</span>
+        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
+      </div>
+    </div>
+  </section>
+  <section class="section" style="border-top:1px solid var(--hairline)">
+    <div class="wrap">
+      <div class="section-head"><h2>Related tools</h2></div>
+      <div class="tool-grid">
+<a class="peg-card" href="jpg-to-png.html" data-name="jpg to png convert turn jpg photos into transparent-ready png files. drag, convert, download.">
+        <span class="tag">Convert</span>
+        <h3>JPG to PNG</h3>
+        <p>Turn JPG photos into transparent-ready PNG files. Drag, convert, download.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="png-to-jpg.html" data-name="png to jpg convert flatten png images to lightweight jpg — great for email and web uploads.">
+        <span class="tag">Convert</span>
+        <h3>PNG to JPG</h3>
+        <p>Flatten PNG images to lightweight JPG — great for email and web uploads.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="jpg-to-webp.html" data-name="jpg to webp convert convert jpg photos to the smaller, modern webp format.">
+        <span class="tag">Convert</span>
+        <h3>JPG to WebP</h3>
+        <p>Convert JPG photos to the smaller, modern WebP format.</p>
+        <span class="go">Open tool</span>
+      </a>
+<a class="peg-card" href="png-to-webp.html" data-name="png to webp convert shrink png images by converting them to webp.">
+        <span class="tag">Convert</span>
+        <h3>PNG to WebP</h3>
+        <p>Shrink PNG images by converting them to WebP.</p>
+        <span class="go">Open tool</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
+          <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
+        </div>
+      <div>
+        <h4>Image Tools</h4>
+        <a href="../image-tools/jpg-to-png.html">JPG to PNG</a>
+        <a href="../image-tools/png-to-jpg.html">PNG to JPG</a>
+        <a href="../image-tools/jpg-to-webp.html">JPG to WebP</a>
+        <a href="../image-tools/webp-to-jpg.html">WebP to JPG</a>
+        <a href="../image-tools/png-to-webp.html">PNG to WebP</a>
+        <a href="../image-tools/image-compressor.html">Image Compressor</a>
+        <a href="../image-tools/image-resizer.html">Image Resizer</a>
+        <a href="../image-tools/image-cropper.html">Image Cropper</a>
+      </div>
+      <div>
+        <h4>PDF Tools</h4>
+        <a href="../pdf-tools/pdf-to-jpg.html">PDF to JPG</a>
+        <a href="../pdf-tools/jpg-to-pdf.html">JPG to PDF</a>
+        <a href="../pdf-tools/merge-pdf.html">Merge PDF</a>
+        <a href="../pdf-tools/split-pdf.html">Split PDF</a>
+        <a href="../pdf-tools/compress-pdf.html">Compress PDF</a>
+      </div>
+      <div>
+        <h4>Student &amp; QR</h4>
+        <a href="../student-tools/gpa-calculator.html">GPA Calculator</a>
+        <a href="../student-tools/cgpa-calculator.html">CGPA Calculator</a>
+        <a href="../student-tools/percentage-calculator.html">Percentage Calculator</a>
+        <a href="../student-tools/grade-calculator.html">Final Grade Calculator</a>
+        <a href="../student-tools/attendance-calculator.html">Attendance Calculator</a>
+        <a href="../student-tools/age-calculator.html">Age Calculator</a>
+        <a href="../student-tools/standard-deviation-calculator.html">Standard Deviation Calculator</a>
+        <a href="../student-tools/scientific-calculator.html">Scientific Calculator</a>
+        <a href="../qr-tools/qr-code-generator.html">QR Code Generator</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="../about.html">About</a>
+        <a href="../guides/index.html">Guides</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms of Use</a>
+      </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
+        <a href="../privacy-policy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="../js/main.js"></script>
+<script src="../js/file-utils.js"></script>
+<script>
+(function(){
+  const dz = document.getElementById('dz');
+  const input = document.getElementById('file-input');
+  const info = document.getElementById('file-info');
+  const btn = document.getElementById('convert-btn');
+  const err = document.getElementById('error');
+  const previewWrap = document.getElementById('preview-wrap');
+  const preview = document.getElementById('preview');
+  const qualityEl = document.getElementById('quality');
+  const qval = document.getElementById('qval');
+  const webpWarning = document.getElementById('webp-warning');
+  if (qualityEl) qualityEl.addEventListener('input', () => qval.textContent = qualityEl.value);
+
+  if ('image/jpeg' === 'image/webp' && webpWarning) {
+    const testCanvas = document.createElement('canvas');
+    testCanvas.width = 1; testCanvas.height = 1;
+    testCanvas.toBlob((blob) => {
+      if (!blob) webpWarning.style.display = 'block';
+    }, 'image/webp');
+  }
+
+  let currentFile = null;
+
+  setupDropzone(dz, input, async (files) => {
+    hideError(err);
+    const file = files[0];
+    if (!file.type.startsWith('image/')) { showError(err, 'Please choose an image file.'); return; }
+    currentFile = file;
+    info.textContent = file.name + '  ·  ' + humanFileSize(file.size);
+    try {
+      const { img, url } = await loadImage(file);
+      preview.src = url;
+      previewWrap.style.display = 'block';
+      btn.disabled = false;
+    } catch (e) {
+      showError(err, e.message);
+    }
+  });
+
+  btn.addEventListener('click', async () => {
+    if (!currentFile) return;
+    hideError(err);
+    btn.disabled = true;
+    btn.textContent = 'Converting…';
+    try {
+      const { img } = await loadImage(currentFile);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      if ('image/jpeg' === 'image/jpeg') {
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      ctx.drawImage(img, 0, 0);
+      const q = qualityEl ? Number(qualityEl.value) / 100 : undefined;
+      const blob = await canvasToBlob(canvas, 'image/jpeg', q);
+      downloadBlob(blob, stripExt(currentFile.name) + '.jpg');
+    } catch (e) {
+      showError(err, 'Conversion failed: ' + e.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Convert to JPG';
+    }
+  });
+})();
+</script>
+</body>
+</html>
