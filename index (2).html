@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('toolpeg-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolpeg — Free Image, PDF & Student Tools (No Sign-up)</title>
+<meta name="description" content="Free browser-based tools: JPG/PNG/WebP converters, image compressor and resizer, merge/split/compress PDF, GPA and CGPA calculators, QR code generator, and more.">
+<link rel="canonical" href="https://toolpegtools.vercel.app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Toolpeg — Free Image, PDF & Student Tools (No Sign-up)">
+<meta property="og:description" content="Free browser-based tools: JPG/PNG/WebP converters, image compressor and resizer, merge/split/compress PDF, GPA and CGPA calculators, QR code generator, and more.">
+<meta property="og:url" content="https://toolpegtools.vercel.app/">
+<meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230F172A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%234F46E5'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="index.html" class="logo"><img src="toolpeg-logo.svg" height="28" alt="Toolpeg"></a>
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
+      <a href="index.html" class="active" aria-current="page">Home</a>
+      <a href="image-tools/index.html">Image Tools</a>
+      <a href="pdf-tools/index.html">PDF Tools</a>
+      <a href="student-tools/index.html">Student Tools</a>
+      <a href="qr-tools/index.html">QR Tools</a>
+      <a href="guides/index.html">Guides</a>
+      <a href="about.html">About</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#tool-search" class="icon-btn" aria-label="Search tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+        <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav"><svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+    </div>
+  </header>
+  <div class="status-strip">
+    <div class="wrap"><span class="led" aria-hidden="true"></span>Runs entirely in your browser &middot; files are never uploaded &middot; free, no sign-up</div>
+  </div>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Free tools for everyday digital tasks</span>
+      <h1>Calculators, converters, PDF and image tools &mdash; all in one place.</h1>
+      <p class="lede">22 free utilities for images, PDFs, QR codes and student calculations. Every tool runs locally in your browser: no account, no watermark, no upload wait.</p>
+      <label class="tool-search" id="tool-search">
+        <span class="sr-only">Search tools</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" id="search-input" placeholder="Search tools&hellip; e.g. compress, GPA, QR" autocomplete="off">
+        <p class="no-results">No tools match that search &mdash; try a different word.</p>
+      </label>
+      <div class="popular-row">
+        <span class="label">Popular:</span>
+        <a href="student-tools/scientific-calculator.html" class="chip">Scientific Calculator</a>
+        <a href="pdf-tools/index.html" class="chip">PDF Tools</a>
+        <a href="qr-tools/qr-code-generator.html" class="chip">QR Generator</a>
+        <a href="image-tools/image-compressor.html" class="chip">Image Compressor</a>
+        <a href="student-tools/gpa-calculator.html" class="chip">GPA Calculator</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="categories">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Explore by category</h2>
+      </div>
+      <div class="category-grid">
+      <a class="category-card" href="student-tools/index.html">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <h3>Student Tools</h3>
+        <p>Calculate grades, GPA, attendance and more.</p>
+      </a>
+      <a class="category-card" href="image-tools/index.html">
+        <span class="icon" aria-hidden="true">🖼️</span>
+        <h3>Image Tools</h3>
+        <p>Compress, resize, crop and convert images.</p>
+      </a>
+      <a class="category-card" href="pdf-tools/index.html">
+        <span class="icon" aria-hidden="true">📄</span>
+        <h3>PDF Tools</h3>
+        <p>Merge, split, compress and convert PDFs.</p>
+      </a>
+      <a class="category-card" href="qr-tools/index.html">
+        <span class="icon" aria-hidden="true">📱</span>
+        <h3>QR Tools</h3>
+        <p>Generate QR codes quickly.</p>
+      </a>
+      <a class="category-card" href="guides/index.html">
+        <span class="icon" aria-hidden="true">📚</span>
+        <h3>Guides</h3>
+        <p>Learn how to use digital tools effectively.</p>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="popular" data-section style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Popular tools</h2>
+        <p>Good starting points if you're new here.</p>
+      </div>
+      <div class="popular-grid">
+<a class="peg-card" href="student-tools/scientific-calculator.html" data-name="scientific calculator math a full scientific calculator with trig, logs, powers and memory keys.">
+        <span class="icon" aria-hidden="true">🧮</span>
+        <span class="tag">Math</span>
+        <h3>Scientific Calculator</h3>
+        <p>A full scientific calculator with trig, logs, powers and memory keys.</p>
+        <span class="go">Open tool<span class="sr-only"> for Scientific Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/gpa-calculator.html" data-name="gpa calculator grades add courses, credits and letter grades to get your semester gpa.">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <span class="tag">Grades</span>
+        <h3>GPA Calculator</h3>
+        <p>Add courses, credits and letter grades to get your semester GPA.</p>
+        <span class="go">Open tool<span class="sr-only"> for GPA Calculator</span></span>
+      </a>
+<a class="peg-card" href="qr-tools/qr-code-generator.html" data-name="qr code generator generate turn a link, text or wi-fi login into a downloadable qr code.">
+        <span class="icon" aria-hidden="true">📱</span>
+        <span class="tag">Generate</span>
+        <h3>QR Code Generator</h3>
+        <p>Turn a link, text or Wi-Fi login into a downloadable QR code.</p>
+        <span class="go">Open tool<span class="sr-only"> for QR Code Generator</span></span>
+      </a>
+<a class="peg-card" href="image-tools/image-compressor.html" data-name="image compressor optimize shrink photo file size with a live quality slider before you upload anywhere.">
+        <span class="icon" aria-hidden="true">⚡</span>
+        <span class="tag">Optimize</span>
+        <h3>Image Compressor</h3>
+        <p>Shrink photo file size with a live quality slider before you upload anywhere.</p>
+        <span class="go">Open tool<span class="sr-only"> for Image Compressor</span></span>
+      </a>
+<a class="peg-card" href="pdf-tools/compress-pdf.html" data-name="compress pdf optimize shrink a pdf's file size by re-rendering pages at a quality you choose.">
+        <span class="icon" aria-hidden="true">⚡</span>
+        <span class="tag">Optimize</span>
+        <h3>Compress PDF</h3>
+        <p>Shrink a PDF's file size by re-rendering pages at a quality you choose.</p>
+        <span class="go">Open tool<span class="sr-only"> for Compress PDF</span></span>
+      </a>
+<a class="peg-card" href="student-tools/percentage-calculator.html" data-name="percentage calculator grades work out what percent a score is, or what score hits a target percent.">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <span class="tag">Grades</span>
+        <h3>Percentage Calculator</h3>
+        <p>Work out what percent a score is, or what score hits a target percent.</p>
+        <span class="go">Open tool<span class="sr-only"> for Percentage Calculator</span></span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Explore our tools</h2>
+        <span class="section-tag">22 tools total</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="image" data-section style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Image tools</h2>
+        <span class="section-tag">08 tools</span>
+      </div>
+      <div class="tool-grid">
+<a class="peg-card" href="image-tools/jpg-to-png.html" data-name="jpg to png convert turn jpg photos into transparent-ready png files. drag, convert, download.">
+        <span class="icon" aria-hidden="true">🔄</span>
+        <span class="tag">Convert</span>
+        <h3>JPG to PNG</h3>
+        <p>Turn JPG photos into transparent-ready PNG files. Drag, convert, download.</p>
+        <span class="go">Open tool<span class="sr-only"> for JPG to PNG</span></span>
+      </a>
+<a class="peg-card" href="image-tools/png-to-jpg.html" data-name="png to jpg convert flatten png images to lightweight jpg — great for email and web uploads.">
+        <span class="icon" aria-hidden="true">🔄</span>
+        <span class="tag">Convert</span>
+        <h3>PNG to JPG</h3>
+        <p>Flatten PNG images to lightweight JPG — great for email and web uploads.</p>
+        <span class="go">Open tool<span class="sr-only"> for PNG to JPG</span></span>
+      </a>
+<a class="peg-card" href="image-tools/jpg-to-webp.html" data-name="jpg to webp convert convert jpg photos to the smaller, modern webp format.">
+        <span class="icon" aria-hidden="true">🔄</span>
+        <span class="tag">Convert</span>
+        <h3>JPG to WebP</h3>
+        <p>Convert JPG photos to the smaller, modern WebP format.</p>
+        <span class="go">Open tool<span class="sr-only"> for JPG to WebP</span></span>
+      </a>
+<a class="peg-card" href="image-tools/webp-to-jpg.html" data-name="webp to jpg convert convert webp images back to widely-supported jpg.">
+        <span class="icon" aria-hidden="true">🔄</span>
+        <span class="tag">Convert</span>
+        <h3>WebP to JPG</h3>
+        <p>Convert WebP images back to widely-supported JPG.</p>
+        <span class="go">Open tool<span class="sr-only"> for WebP to JPG</span></span>
+      </a>
+<a class="peg-card" href="image-tools/png-to-webp.html" data-name="png to webp convert shrink png images by converting them to webp.">
+        <span class="icon" aria-hidden="true">🔄</span>
+        <span class="tag">Convert</span>
+        <h3>PNG to WebP</h3>
+        <p>Shrink PNG images by converting them to WebP.</p>
+        <span class="go">Open tool<span class="sr-only"> for PNG to WebP</span></span>
+      </a>
+<a class="peg-card" href="image-tools/image-compressor.html" data-name="image compressor optimize shrink photo file size with a live quality slider before you upload anywhere.">
+        <span class="icon" aria-hidden="true">⚡</span>
+        <span class="tag">Optimize</span>
+        <h3>Image Compressor</h3>
+        <p>Shrink photo file size with a live quality slider before you upload anywhere.</p>
+        <span class="go">Open tool<span class="sr-only"> for Image Compressor</span></span>
+      </a>
+<a class="peg-card" href="image-tools/image-resizer.html" data-name="image resizer resize resize images to exact pixels or a percentage, without distorting them.">
+        <span class="icon" aria-hidden="true">📐</span>
+        <span class="tag">Resize</span>
+        <h3>Image Resizer</h3>
+        <p>Resize images to exact pixels or a percentage, without distorting them.</p>
+        <span class="go">Open tool<span class="sr-only"> for Image Resizer</span></span>
+      </a>
+<a class="peg-card" href="image-tools/image-cropper.html" data-name="image cropper edit crop to a free rectangle or a fixed ratio like 1:1, 4:5, or 16:9.">
+        <span class="icon" aria-hidden="true">🖌️</span>
+        <span class="tag">Edit</span>
+        <h3>Image Cropper</h3>
+        <p>Crop to a free rectangle or a fixed ratio like 1:1, 4:5, or 16:9.</p>
+        <span class="go">Open tool<span class="sr-only"> for Image Cropper</span></span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pdf" data-section style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>PDF tools</h2>
+        <span class="section-tag">05 tools</span>
+      </div>
+      <div class="tool-grid">
+<a class="peg-card" href="pdf-tools/pdf-to-jpg.html" data-name="pdf to jpg convert turn every page of a pdf into a downloadable jpg image.">
+        <span class="icon" aria-hidden="true">🔄</span>
+        <span class="tag">Convert</span>
+        <h3>PDF to JPG</h3>
+        <p>Turn every page of a PDF into a downloadable JPG image.</p>
+        <span class="go">Open tool<span class="sr-only"> for PDF to JPG</span></span>
+      </a>
+<a class="peg-card" href="pdf-tools/jpg-to-pdf.html" data-name="jpg to pdf convert combine one or more jpg/png photos into a single pdf document.">
+        <span class="icon" aria-hidden="true">🔄</span>
+        <span class="tag">Convert</span>
+        <h3>JPG to PDF</h3>
+        <p>Combine one or more JPG/PNG photos into a single PDF document.</p>
+        <span class="go">Open tool<span class="sr-only"> for JPG to PDF</span></span>
+      </a>
+<a class="peg-card" href="pdf-tools/merge-pdf.html" data-name="merge pdf combine stack multiple pdfs into one file, in the order you choose.">
+        <span class="icon" aria-hidden="true">🔗</span>
+        <span class="tag">Combine</span>
+        <h3>Merge PDF</h3>
+        <p>Stack multiple PDFs into one file, in the order you choose.</p>
+        <span class="go">Open tool<span class="sr-only"> for Merge PDF</span></span>
+      </a>
+<a class="peg-card" href="pdf-tools/split-pdf.html" data-name="split pdf split pull specific pages out of a pdf, or split it into single pages.">
+        <span class="icon" aria-hidden="true">✂️</span>
+        <span class="tag">Split</span>
+        <h3>Split PDF</h3>
+        <p>Pull specific pages out of a PDF, or split it into single pages.</p>
+        <span class="go">Open tool<span class="sr-only"> for Split PDF</span></span>
+      </a>
+<a class="peg-card" href="pdf-tools/compress-pdf.html" data-name="compress pdf optimize shrink a pdf's file size by re-rendering pages at a quality you choose.">
+        <span class="icon" aria-hidden="true">⚡</span>
+        <span class="tag">Optimize</span>
+        <h3>Compress PDF</h3>
+        <p>Shrink a PDF's file size by re-rendering pages at a quality you choose.</p>
+        <span class="go">Open tool<span class="sr-only"> for Compress PDF</span></span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="student" data-section style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Student tools</h2>
+        <span class="section-tag">08 tools</span>
+      </div>
+      <div class="tool-grid">
+<a class="peg-card" href="student-tools/gpa-calculator.html" data-name="gpa calculator grades add courses, credits and letter grades to get your semester gpa.">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <span class="tag">Grades</span>
+        <h3>GPA Calculator</h3>
+        <p>Add courses, credits and letter grades to get your semester GPA.</p>
+        <span class="go">Open tool<span class="sr-only"> for GPA Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/cgpa-calculator.html" data-name="cgpa calculator grades combine multiple semesters' gpa and credits into one cumulative cgpa.">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <span class="tag">Grades</span>
+        <h3>CGPA Calculator</h3>
+        <p>Combine multiple semesters' GPA and credits into one cumulative CGPA.</p>
+        <span class="go">Open tool<span class="sr-only"> for CGPA Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/percentage-calculator.html" data-name="percentage calculator grades work out what percent a score is, or what score hits a target percent.">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <span class="tag">Grades</span>
+        <h3>Percentage Calculator</h3>
+        <p>Work out what percent a score is, or what score hits a target percent.</p>
+        <span class="go">Open tool<span class="sr-only"> for Percentage Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/grade-calculator.html" data-name="final grade calculator grades work out your overall grade from weighted categories like exams and homework.">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <span class="tag">Grades</span>
+        <h3>Final Grade Calculator</h3>
+        <p>Work out your overall grade from weighted categories like exams and homework.</p>
+        <span class="go">Open tool<span class="sr-only"> for Final Grade Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/attendance-calculator.html" data-name="attendance calculator grades check your attendance percentage and how many classes you can still miss.">
+        <span class="icon" aria-hidden="true">🎓</span>
+        <span class="tag">Grades</span>
+        <h3>Attendance Calculator</h3>
+        <p>Check your attendance percentage and how many classes you can still miss.</p>
+        <span class="go">Open tool<span class="sr-only"> for Attendance Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/age-calculator.html" data-name="age calculator dates get an exact age in years, months and days from any birth date.">
+        <span class="icon" aria-hidden="true">📅</span>
+        <span class="tag">Dates</span>
+        <h3>Age Calculator</h3>
+        <p>Get an exact age in years, months and days from any birth date.</p>
+        <span class="go">Open tool<span class="sr-only"> for Age Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/standard-deviation-calculator.html" data-name="standard deviation calculator statistics enter a data set to get mean, variance and standard deviation instantly.">
+        <span class="icon" aria-hidden="true">📊</span>
+        <span class="tag">Statistics</span>
+        <h3>Standard Deviation Calculator</h3>
+        <p>Enter a data set to get mean, variance and standard deviation instantly.</p>
+        <span class="go">Open tool<span class="sr-only"> for Standard Deviation Calculator</span></span>
+      </a>
+<a class="peg-card" href="student-tools/scientific-calculator.html" data-name="scientific calculator math a full scientific calculator with trig, logs, powers and memory keys.">
+        <span class="icon" aria-hidden="true">🧮</span>
+        <span class="tag">Math</span>
+        <h3>Scientific Calculator</h3>
+        <p>A full scientific calculator with trig, logs, powers and memory keys.</p>
+        <span class="go">Open tool<span class="sr-only"> for Scientific Calculator</span></span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="qr" data-section style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>QR tools</h2>
+        <span class="section-tag">01 tool</span>
+      </div>
+      <div class="tool-grid">
+<a class="peg-card" href="qr-tools/qr-code-generator.html" data-name="qr code generator generate turn a link, text or wi-fi login into a downloadable qr code.">
+        <span class="icon" aria-hidden="true">📱</span>
+        <span class="tag">Generate</span>
+        <h3>QR Code Generator</h3>
+        <p>Turn a link, text or Wi-Fi login into a downloadable QR code.</p>
+        <span class="go">Open tool<span class="sr-only"> for QR Code Generator</span></span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Helpful guides</h2>
+        <p>Short, practical explainers behind the tools.</p>
+      </div>
+      <div class="guide-grid">
+      <a class="guide-card" href="guides/jpg-vs-png.html">
+        <span class="tag">Guide</span>
+        <h3>JPG vs PNG: Which Should You Use?</h3>
+        <p>A plain-language guide to picking the right image format, with a quick decision rule you can use every time.</p>
+        <span class="go">Read guide &rarr;</span>
+      </a>
+      <a class="guide-card" href="guides/compress-image-without-losing-quality.html">
+        <span class="tag">Guide</span>
+        <h3>How to Compress an Image Without Losing (Much) Quality</h3>
+        <p>The real levers that shrink a file size — format, dimensions and quality — and the order to use them in.</p>
+        <span class="go">Read guide &rarr;</span>
+      </a>
+      <a class="guide-card" href="guides/how-to-calculate-gpa.html">
+        <span class="tag">Guide</span>
+        <h3>How to Calculate GPA (With Formula)</h3>
+        <p>The credit-weighted GPA formula, a worked example, and how GPA differs from CGPA.</p>
+        <span class="go">Read guide &rarr;</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Why Toolpeg</h2>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <span class="icon" aria-hidden="true">⚡</span>
+          <h3>Fast</h3>
+          <p>Tools are designed to be simple and quick &mdash; open one and use it, no setup.</p>
+        </div>
+        <div class="trust-item">
+          <span class="icon" aria-hidden="true">🔒</span>
+          <h3>Privacy-focused</h3>
+          <p>Where possible, files are processed locally in your browser instead of being uploaded to a server.</p>
+        </div>
+        <div class="trust-item">
+          <span class="icon" aria-hidden="true">📱</span>
+          <h3>Works everywhere</h3>
+          <p>A responsive experience across desktop, tablet and mobile.</p>
+        </div>
+        <div class="trust-item">
+          <span class="icon" aria-hidden="true">🆓</span>
+          <h3>Free to use</h3>
+          <p>Every tool listed here is free, with no sign-up required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="index.html" class="logo"><img src="toolpeg-logo.svg" height="28" alt="Toolpeg"></a>
+          <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
+        </div>
+      <div>
+        <h4>Tools</h4>
+        <a href="student-tools/index.html">Student Tools</a>
+        <a href="image-tools/index.html">Image Tools</a>
+        <a href="pdf-tools/index.html">PDF Tools</a>
+        <a href="qr-tools/index.html">QR Tools</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="guides/index.html">Guides</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <a href="https://github.com/heady2121/toolpeg-tools" target="_blank" rel="noopener">GitHub repo</a>
+      </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
+        <a href="https://github.com/heady2121/toolpeg-tools" target="_blank" rel="noopener" class="gh-link"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 007.87 10.94c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.2 1.78 1.2 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+<script src="js/main.js"></script>
+<script src="js/search.js"></script>
+</body>
+</html>
