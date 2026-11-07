@@ -184,89 +184,188 @@
     </div>
   </footer>
 
-<script src="../js/main.js?v=202611031215"></script>
+<!-- ============================================================
+  REPLACE everything from the final <script> (the one that starts with
+  "(function(){ const expr = ...") down to </body> in
+  student-tools/scientific-calculator.html with this whole file.
+  Keep the line  <script src="../js/main.js?v=..."></script>  above it.
+============================================================ -->
 <script>
-(function(){
-  const expr = document.getElementById('expr');
-  const resultLine = document.getElementById('expr-result');
-  const memOut = document.getElementById('mem-out');
-  let memory = 0;
+(function () {
+  /* ---------- Expression engine (no eval / new Function) ---------- */
+  var FUNCS = {
+    sin: Math.sin, cos: Math.cos, tan: Math.tan,
+    log: Math.log10, ln: Math.log, sqrt: Math.sqrt
+  };
+  var CONSTS = { pi: Math.PI, e: Math.E };
 
   function factorial(n) {
     if (n < 0 || Math.floor(n) !== n) return NaN;
-    let r = 1;
-    for (let i = 2; i <= n; i++) r *= i;
+    if (n > 170) return Infinity;
+    var r = 1;
+    for (var i = 2; i <= n; i++) r *= i;
     return r;
   }
 
-  function safeEval(input) {
-    let s = input
-      .replace(/\u00f7/g, '/')
-      .replace(/\u00d7/g, '*')
-      .replace(/\u2212/g, '-')
-      .replace(/\^/g, '**')
-      .replace(/pi/g, 'Math.PI')
-      .replace(/\be\b/g, 'Math.E')
-      .replace(/sqrt\(/g, 'Math.sqrt(')
-      .replace(/sin\(/g, 'Math.sin(')
-      .replace(/cos\(/g, 'Math.cos(')
-      .replace(/tan\(/g, 'Math.tan(')
-      .replace(/log\(/g, 'Math.log10(')
-      .replace(/ln\(/g, 'Math.log(');
-    s = s.replace(/(\d+(\.\d+)?)!/g, 'FACT($1)');
-    if (!/^[0-9+\-*/().\s,MathPIElogsqrtincoat\^FACT]*$/i.test(s)) {
-      // allow-list check loosely; fall through to Function eval with try/catch as final guard
+  function tokenize(src) {
+    var s = src
+      .replace(/\u00f7/g, '/').replace(/\u00d7/g, '*').replace(/\u2212/g, '-')
+      .replace(/\u03c0/g, 'pi').toLowerCase();
+    var tokens = [], i = 0, m;
+    while (i < s.length) {
+      var ch = s[i];
+      if (/\s/.test(ch)) { i++; continue; }
+      m = /^(\d+\.?\d*|\.\d+)(e[+-]?\d+)?/.exec(s.slice(i));
+      if (m) { tokens.push({ t: 'num', v: parseFloat(m[0]) }); i += m[0].length; continue; }
+      m = /^[a-z]+/.exec(s.slice(i));
+      if (m) {
+        if (!(m[0] in FUNCS) && !(m[0] in CONSTS)) throw new Error('Unknown: ' + m[0]);
+        tokens.push({ t: m[0] in FUNCS ? 'fn' : 'const', v: m[0] });
+        i += m[0].length; continue;
+      }
+      if ('+-*/^()!%'.indexOf(ch) !== -1) { tokens.push({ t: 'op', v: ch }); i++; continue; }
+      throw new Error('Bad character: ' + ch);
     }
-    // eslint-disable-next-line no-new-func
-    const fn = new Function('FACT', 'return (' + s + ')');
-    return fn(factorial);
+    return tokens;
+  }
+
+  /*  expr    := term (('+'|'-') term)*
+      term    := unary (('*'|'/') unary | implicit-multiply unary)*
+      unary   := ('+'|'-') unary | power
+      power   := postfix ('^' unary)?          (right-associative)
+      postfix := primary ('!' | '%')*
+      primary := number | const | fn '(' expr ')' | '(' expr ')'   */
+  function evaluate(src) {
+    var toks = tokenize(src), p = 0;
+    function peek() { return toks[p]; }
+    function isOp(v) { return peek() && peek().t === 'op' && peek().v === v; }
+
+    function parseExpr() {
+      var v = parseTerm();
+      while (isOp('+') || isOp('-')) {
+        var op = toks[p++].v, r = parseTerm();
+        v = op === '+' ? v + r : v - r;
+      }
+      return v;
+    }
+    function startsOperand() {
+      var k = peek();
+      return k && (k.t === 'num' || k.t === 'const' || k.t === 'fn' || (k.t === 'op' && k.v === '('));
+    }
+    function parseTerm() {
+      var v = parseUnary();
+      for (;;) {
+        if (isOp('*') || isOp('/')) {
+          var op = toks[p++].v, r = parseUnary();
+          v = op === '*' ? v * r : v / r;
+        } else if (startsOperand()) {
+          v = v * parseUnary();           // 2pi, 3(4+1), 2sin(1)
+        } else break;
+      }
+      return v;
+    }
+    function parseUnary() {
+      if (isOp('-')) { p++; return -parseUnary(); }
+      if (isOp('+')) { p++; return parseUnary(); }
+      return parsePower();
+    }
+    function parsePower() {
+      var base = parsePostfix();
+      if (isOp('^')) { p++; return Math.pow(base, parseUnary()); }
+      return base;
+    }
+    function parsePostfix() {
+      var v = parsePrimary();
+      for (;;) {
+        if (isOp('!')) { p++; v = factorial(v); }
+        else if (isOp('%')) { p++; v = v / 100; }
+        else break;
+      }
+      return v;
+    }
+    function closeParen() {
+      if (isOp(')')) p++;                 // a missing ")" at the end is forgiven
+      else if (p < toks.length) throw new Error('Expected )');
+    }
+    function parsePrimary() {
+      var k = toks[p++];
+      if (!k) throw new Error('Unexpected end');
+      if (k.t === 'num') return k.v;
+      if (k.t === 'const') return CONSTS[k.v];
+      if (k.t === 'fn') {
+        if (!isOp('(')) throw new Error('Expected ( after ' + k.v);
+        p++;
+        var arg = parseExpr(); closeParen();
+        return FUNCS[k.v](arg);
+      }
+      if (k.t === 'op' && k.v === '(') { var v = parseExpr(); closeParen(); return v; }
+      throw new Error('Unexpected ' + k.v);
+    }
+
+    var result = parseExpr();
+    if (p < toks.length) throw new Error('Unexpected ' + toks[p].v);
+    return result;
+  }
+
+  // 12 significant digits; snaps float noise like sin(pi) = 1.2e-16 to 0
+  function fmt(n) {
+    if (Math.abs(n) < 1e-12) return 0;
+    return parseFloat(n.toPrecision(12));
+  }
+
+  /* ---------- UI ---------- */
+  var expr = document.getElementById('expr');
+  var resultLine = document.getElementById('expr-result');
+  var memOut = document.getElementById('mem-out');
+  var memory = 0;
+
+  function evalChecked(text) {
+    var v = evaluate(text);
+    if (typeof v !== 'number' || !isFinite(v)) throw new Error('Math error');
+    return fmt(v);
   }
 
   function updatePreview() {
     if (!expr.value.trim()) { resultLine.innerHTML = '&nbsp;'; return; }
-    try {
-      const val = safeEval(expr.value);
-      resultLine.textContent = (typeof val === 'number' && isFinite(val)) ? ('= ' + round(val)) : '';
-    } catch (e) { resultLine.innerHTML = '&nbsp;'; }
+    try { resultLine.textContent = '= ' + evalChecked(expr.value); }
+    catch (e) { resultLine.innerHTML = '&nbsp;'; }
   }
 
-  function round(n) { return Math.round(n * 1e10) / 1e10; }
+  function calculate() {
+    if (!expr.value.trim()) return;
+    try { expr.value = String(evalChecked(expr.value)); updatePreview(); }
+    catch (e) { resultLine.textContent = 'Error'; }
+  }
 
-  document.querySelectorAll('.calc-key').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const val = btn.dataset.val;
-      if (val === '=') {
-        try {
-          const result = round(safeEval(expr.value));
-          expr.value = String(result);
-        } catch (e) { resultLine.textContent = 'Error'; return; }
-      } else {
-        expr.value += val;
-      }
-      updatePreview();
+  document.querySelectorAll('.calc-key').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var val = btn.dataset.val;
+      if (val === '=') calculate();
+      else { expr.value += val; updatePreview(); }
       expr.focus();
     });
   });
 
-  document.getElementById('clear-btn').addEventListener('click', () => { expr.value = ''; updatePreview(); });
-  document.getElementById('back-btn').addEventListener('click', () => { expr.value = expr.value.slice(0, -1); updatePreview(); });
+  document.getElementById('clear-btn').addEventListener('click', function () { expr.value = ''; updatePreview(); });
+  document.getElementById('back-btn').addEventListener('click', function () { expr.value = expr.value.slice(0, -1); updatePreview(); });
   expr.addEventListener('input', updatePreview);
-  expr.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      try { expr.value = String(round(safeEval(expr.value))); updatePreview(); } catch (er) { resultLine.textContent = 'Error'; }
-    }
+  expr.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); calculate(); }
   });
 
-  document.getElementById('mc').addEventListener('click', () => { memory = 0; memOut.textContent = memory; });
-  document.getElementById('mplus').addEventListener('click', () => { try { memory += safeEval(expr.value || '0'); } catch(e){} memOut.textContent = round(memory); });
-  document.getElementById('mminus').addEventListener('click', () => { try { memory -= safeEval(expr.value || '0'); } catch(e){} memOut.textContent = round(memory); });
-  document.getElementById('mr').addEventListener('click', () => { expr.value += String(memory); updatePreview(); });
+  function memValue() { try { return evalChecked(expr.value || '0'); } catch (e) { return null; } }
+  document.getElementById('mc').addEventListener('click', function () { memory = 0; memOut.textContent = memory; });
+  document.getElementById('mplus').addEventListener('click', function () { var v = memValue(); if (v !== null) memory += v; memOut.textContent = fmt(memory); });
+  document.getElementById('mminus').addEventListener('click', function () { var v = memValue(); if (v !== null) memory -= v; memOut.textContent = fmt(memory); });
+  document.getElementById('mr').addEventListener('click', function () { expr.value += String(fmt(memory)); updatePreview(); expr.focus(); });
 })();
 </script>
 <style>
-  #calc-grid .calc-key{font-family:var(--font);font-size:15px;padding:14px 0;border-radius:var(--radius);border:1px solid var(--border);background:#fff;cursor:pointer;transition:background .12s,border-color .12s}
+  #calc-grid .calc-key{font-family:var(--font);font-size:15px;padding:14px 0;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:background .12s,border-color .12s}
   #calc-grid .calc-key:hover{border-color:var(--text)}
-  #calc-grid .key-eq{background:var(--primary);border-color:var(--primary);color:var(--primary);font-weight:600}
+  #calc-grid .calc-key:active{transform:translateY(1px)}
+  #calc-grid .key-eq{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
+  #calc-grid .key-eq:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
 </style>
 </body>
 </html>
