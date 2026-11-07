@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <script>(function(){try{var t=localStorage.getItem('toolpeg-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Compressor &mdash; Shrink JPG/PNG File Size Free | Toolpeg</title>
-<meta name="description" content="Compress JPG or PNG images with a live quality slider and size estimate. Free, no upload, works in your browser.">
+<title>Image Compressor &mdash; Shrink JPG, PNG &amp; WebP File Size Free | Toolpeg</title>
+<meta name="description" content="Compress JPG, PNG or WebP images with a live quality slider, output format choice and size estimate. Free, no upload, works in your browser.">
 <link rel="canonical" href="https://toolpegtools.vercel.app/image-tools/image-compressor.html">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Image Compressor &mdash; Shrink JPG/PNG File Size Free | Toolpeg">
-<meta property="og:description" content="Compress JPG or PNG images with a live quality slider and size estimate. Free, no upload, works in your browser.">
+<meta property="og:description" content="Compress JPG, PNG or WebP images with a live quality slider, output format choice and size estimate. Free, no upload, works in your browser.">
 <meta property="og:url" content="https://toolpegtools.vercel.app/image-tools/image-compressor.html">
 <meta property="og:image" content="https://toolpegtools.vercel.app/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -57,7 +57,7 @@
       <div>
         <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload image">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-          <h3>Drop a JPG or PNG here, or click to browse</h3>
+          <h3>Drop an image here, or click to browse</h3>
           <p>JPG / PNG / WEBP &middot; processed on your device</p>
         </div>
         <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden>
@@ -73,8 +73,19 @@
             <div id="file-info" style="font-family:var(--font);font-size:13px;color:var(--text-muted)">No file yet</div>
           </div>
           <div class="field">
+            <label for="format">Output format</label>
+            <select id="format">
+              <option value="webp">WebP &mdash; smallest, keeps transparency</option>
+              <option value="jpeg">JPG &mdash; small, no transparency</option>
+              <option value="original">Original format</option>
+            </select>
+            <span class="hint" id="format-hint"></span>
+          </div>
+          <div id="alpha-warning" class="error-box" role="alert">This image has transparent areas. JPG can't store transparency, so they will be filled with white. Choose WebP or Original format to keep them.</div>
+          <div class="field">
             <label for="quality">Quality &mdash; <span id="qval">75</span>%</label>
             <input type="range" id="quality" min="10" max="100" value="75">
+            <span class="hint" id="quality-hint"></span>
           </div>
           <div class="result-box" style="margin-bottom:18px">
             <span class="label">Estimated output size</span>
@@ -106,6 +117,8 @@
       <div class="faq-block">
         <h2>Frequently asked questions</h2>
           <div class="faq-item"><h3>Will compressing reduce image dimensions?</h3><p>No — only file size changes. Use the Image Resizer if you also want smaller pixel dimensions.</p></div>
+          <div class="faq-item"><h3>Why doesn't the quality slider change my PNG?</h3><p>PNG is a lossless format, so it has no quality setting to lower. To make a PNG much smaller, convert it to WebP (keeps transparency) or JPG (no transparency) using the output format menu.</p></div>
+          <div class="faq-item"><h3>What happens to transparent areas?</h3><p>WebP and PNG keep transparency. JPG cannot, so transparent areas are filled with white and you'll see a warning before you download.</p></div>
           <div class="faq-item"><h3>What quality setting should I use?</h3><p>70–85% is a good starting point for photos — noticeably smaller with minimal visible loss. Go higher for images with fine detail or text.</p></div>
       </div>
       <div class="ad-slot" aria-hidden="true">
@@ -200,28 +213,111 @@
   const preview = document.getElementById('preview');
   const quality = document.getElementById('quality');
   const qval = document.getElementById('qval');
+  const qualityHint = document.getElementById('quality-hint');
+  const formatEl = document.getElementById('format');
+  const formatHint = document.getElementById('format-hint');
+  const alphaWarning = document.getElementById('alpha-warning');
   const estSize = document.getElementById('est-size');
   const estSub = document.getElementById('est-sub');
 
-  let currentFile = null, currentImg = null, originalSize = 0, debounceT = null;
+  const EXT = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' };
 
-  function outMime(file) {
-    return file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+  let currentFile = null, currentImg = null, originalSize = 0, hasAlpha = false, debounceT = null;
+  let webpOk = true;
+
+  // Can this browser export WebP? (older Safari silently falls back to PNG)
+  (function checkWebp() {
+    const c = document.createElement('canvas');
+    c.width = c.height = 1;
+    c.toBlob((b) => {
+      webpOk = !!b && b.type === 'image/webp';
+      if (!webpOk) {
+        const opt = formatEl.querySelector('option[value="webp"]');
+        if (opt) { opt.disabled = true; opt.textContent = 'WebP (not supported by this browser)'; }
+        if (formatEl.value === 'webp') formatEl.value = 'jpeg';
+        refreshUi();
+      }
+    }, 'image/webp');
+  })();
+
+  // The MIME type that will actually be exported
+  function outMime() {
+    const f = formatEl.value;
+    if (f === 'webp') return 'image/webp';
+    if (f === 'jpeg') return 'image/jpeg';
+    return currentFile ? currentFile.type : 'image/jpeg';   // original
   }
 
-  async function updateEstimate() {
-    if (!currentImg) return;
+  // Alpha detection: draw a downscaled copy and look for any pixel below full opacity.
+  // (Downscaling blends alpha, so thin transparent edges still show up.)
+  function detectAlpha(img, file) {
+    if (file.type === 'image/jpeg') return false;            // JPG can never be transparent
+    try {
+      const scale = Math.min(1, 512 / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.max(1, Math.round(img.naturalWidth * scale));
+      const h = Math.max(1, Math.round(img.naturalHeight * scale));
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(img, 0, 0, w, h);
+      const d = ctx.getImageData(0, 0, w, h).data;
+      for (let i = 3; i < d.length; i += 4) if (d[i] < 255) return true;
+    } catch (e) { return true; }                               // can't tell -> warn to be safe
+    return false;
+  }
+
+  function refreshUi() {
+    const mime = outMime();
+    const isPng = mime === 'image/png';
+    // Quality slider only does something for lossy formats
+    quality.disabled = isPng;
+    qualityHint.textContent = isPng
+      ? 'PNG is lossless, so the quality slider has no effect. Choose WebP or JPG for real savings.'
+      : '';
+    formatHint.textContent = (formatEl.value === 'original' && isPng)
+      ? 'Re-saving a PNG as PNG often does not make it smaller, and can make it bigger.'
+      : '';
+    // JPG can't hold transparency
+    alphaWarning.classList.toggle('show', hasAlpha && mime === 'image/jpeg');
+    if (currentImg) updateEstimate();
+  }
+
+  function drawToCanvas(mime) {
     const canvas = document.createElement('canvas');
     canvas.width = currentImg.naturalWidth;
     canvas.height = currentImg.naturalHeight;
     const ctx = canvas.getContext('2d');
-    const mime = outMime(currentFile);
-    if (mime === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+    if (mime === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
     ctx.drawImage(currentImg, 0, 0);
-    const blob = await canvasToBlob(canvas, mime, Number(quality.value) / 100);
-    const pct = originalSize ? Math.round((1 - blob.size / originalSize) * 100) : 0;
-    estSize.textContent = humanFileSize(blob.size);
-    estSub.textContent = pct > 0 ? ('about ' + pct + '% smaller than the original ' + humanFileSize(originalSize)) : ('original was ' + humanFileSize(originalSize));
+    return canvas;
+  }
+
+  async function encode() {
+    const mime = outMime();
+    const q = mime === 'image/png' ? undefined : Number(quality.value) / 100;
+    const blob = await canvasToBlob(drawToCanvas(mime), mime, q);
+    if (blob.type !== mime) {
+      // Browser fell back to another format (e.g. no WebP export)
+      throw new Error('Your browser could not export ' + (EXT[mime] || mime).toUpperCase() + '. Please choose a different output format.');
+    }
+    return blob;
+  }
+
+  async function updateEstimate() {
+    if (!currentImg) return;
+    try {
+      const blob = await encode();
+      estSize.textContent = humanFileSize(blob.size);
+      if (blob.size >= originalSize) {
+        estSub.textContent = 'This is not smaller than the original (' + humanFileSize(originalSize) + '). Try WebP or JPG, or lower the quality.';
+      } else {
+        const pct = Math.round((1 - blob.size / originalSize) * 100);
+        estSub.textContent = 'about ' + pct + '% smaller than the original ' + humanFileSize(originalSize);
+      }
+    } catch (e) {
+      estSize.textContent = '\u2014';
+      estSub.textContent = e.message;
+    }
   }
 
   quality.addEventListener('input', () => {
@@ -229,6 +325,7 @@
     clearTimeout(debounceT);
     debounceT = setTimeout(updateEstimate, 150);
   });
+  formatEl.addEventListener('change', refreshUi);
 
   setupDropzone(dz, input, async (files) => {
     hideError(err);
@@ -236,14 +333,15 @@
     if (!file.type.startsWith('image/')) { showError(err, 'Please choose an image file.'); return; }
     currentFile = file;
     originalSize = file.size;
-    info.textContent = file.name + '  ·  ' + humanFileSize(file.size);
+    info.textContent = file.name + '  \u00b7  ' + humanFileSize(file.size);
     try {
       const { img, url } = await loadImage(file);
       currentImg = img;
+      hasAlpha = detectAlpha(img, file);
       preview.src = url;
       previewWrap.style.display = 'block';
       btn.disabled = false;
-      updateEstimate();
+      refreshUi();
     } catch (e) { showError(err, e.message); }
   });
 
@@ -251,17 +349,14 @@
     if (!currentFile || !currentImg) return;
     hideError(err);
     btn.disabled = true;
-    btn.textContent = 'Compressing…';
+    btn.textContent = 'Compressing\u2026';
     try {
-      const canvas = document.createElement('canvas');
-      canvas.width = currentImg.naturalWidth;
-      canvas.height = currentImg.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      const mime = outMime(currentFile);
-      if (mime === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height); }
-      ctx.drawImage(currentImg, 0, 0);
-      const blob = await canvasToBlob(canvas, mime, Number(quality.value) / 100);
-      downloadBlob(blob, stripExt(currentFile.name) + '-compressed.' + (mime === 'image/png' ? 'png' : 'jpg'));
+      const blob = await encode();
+      if (blob.size >= originalSize &&
+          !window.confirm('The result (' + humanFileSize(blob.size) + ') is not smaller than the original (' + humanFileSize(originalSize) + '). Download anyway?')) {
+        return;
+      }
+      downloadBlob(blob, stripExt(currentFile.name) + '-compressed.' + EXT[blob.type]);
     } catch (e) {
       showError(err, 'Compression failed: ' + e.message);
     } finally {
@@ -269,6 +364,8 @@
       btn.textContent = 'Compress & download';
     }
   });
+
+  refreshUi();
 })();
 </script>
 </body>
