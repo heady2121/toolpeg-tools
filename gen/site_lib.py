@@ -325,7 +325,9 @@ def PAGE(title, description, canonical_path, depth, active, body, head_extra="",
 <meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="{SITE_DOMAIN}/og-image.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230F172A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%234F46E5'/%3E%3C/svg%3E">
+<link rel="icon" href="{depth}favicon.ico" sizes="48x48">
+<link rel="icon" href="{depth}favicon.svg" type="image/svg+xml" sizes="any">
+<link rel="apple-touch-icon" href="{depth}apple-touch-icon.png">
 <link rel="stylesheet" href="{depth}css/style.css?v={ASSET_V}">
 {head_extra}</head>
 <body>
