@@ -455,17 +455,217 @@ def gen_split_pdf():
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="pdf", body=body, slug=slug, foot_scripts=script))
 
 
-# ------------------------------------------------------------- compress
+# ---------------------------------------------------------------- Compress PDF
+COMPRESS_JS = r"""(function(){
+  const dz = document.getElementById('dz');
+  const input = document.getElementById('file-input');
+  const err = document.getElementById('error');
+  const optionsWrap = document.getElementById('options-wrap');
+  const fileInfo = document.getElementById('file-info');
+  const mode = document.getElementById('mode');
+  const modeNote = document.getElementById('mode-note');
+  const level = document.getElementById('level');
+  const compressBtn = document.getElementById('compress-btn');
+  const status = document.getElementById('status');
+  const bar = document.getElementById('bar');
+  const statusText = document.getElementById('status-text');
+  const resultBox = document.getElementById('result-box');
+  const newSize = document.getElementById('new-size');
+  const sizeSub = document.getElementById('size-sub');
+  let currentFile = null;
+
+  // Rasterize mode: re-render every page as an image.
+  const RASTER = {
+    high: { scale: 1.0, quality: 0.5 },
+    balanced: { scale: 1.5, quality: 0.7 },
+    low: { scale: 2.0, quality: 0.85 },
+  };
+  // Keep-text mode: recompress embedded JPEGs, longest side capped at maxDim pixels.
+  const KEEP = {
+    high: { maxDim: 1200, quality: 0.5 },
+    balanced: { maxDim: 1800, quality: 0.7 },
+    low: { maxDim: 2600, quality: 0.85 },
+  };
+  const MIN_IMAGE_BYTES = 20 * 1024; // skip tiny images, not worth touching
+
+  const NOTES = {
+    keep: 'Text, fonts and links are left exactly as they are. Only the JPEG images inside the PDF are recompressed.',
+    raster: 'Every page becomes an image. Text will no longer be selectable or searchable.',
+  };
+  function updateNote() { modeNote.textContent = NOTES[mode.value]; }
+  mode.addEventListener('change', updateNote);
+  updateNote();
+
+  setupDropzone(dz, input, async (files) => {
+    hideError(err);
+    const file = files[0];
+    if (file.type !== 'application/pdf') { showError(err, 'Please choose a PDF file.'); return; }
+    currentFile = file;
+    fileInfo.textContent = file.name + '  \u00b7  ' + humanFileSize(file.size);
+    optionsWrap.style.display = 'grid';
+    resultBox.style.display = 'none';
+  });
+
+  // ---- Mode 1: keep text -------------------------------------------------
+  async function shrinkJpeg(bytes, maxDim, quality) {
+    if (!window.createImageBitmap) return null;
+    // 'none' = ignore EXIF rotation, because PDF viewers ignore it too
+    const bmp = await createImageBitmap(new Blob([bytes], { type: 'image/jpeg' }), { imageOrientation: 'none' });
+    try {
+      const ratio = Math.min(1, maxDim / Math.max(bmp.width, bmp.height));
+      const w = Math.max(1, Math.round(bmp.width * ratio));
+      const h = Math.max(1, Math.round(bmp.height * ratio));
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(bmp, 0, 0, w, h);
+      const out = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+      if (!out) return null;
+      const outBytes = new Uint8Array(await out.arrayBuffer());
+      if (outBytes.length > bytes.length * 0.9) return null; // not a meaningful saving, keep original
+      return { bytes: outBytes, w, h };
+    } finally {
+      if (bmp.close) bmp.close();
+    }
+  }
+
+  async function compressKeepText(buf) {
+    const { PDFDocument, PDFName, PDFArray, PDFRawStream } = PDFLib;
+    const { maxDim, quality } = KEEP[level.value];
+    let pdfDoc;
+    try {
+      pdfDoc = await PDFDocument.load(buf, { updateMetadata: false });
+    } catch (e) {
+      if (/encrypt/i.test((e && e.message) || '')) {
+        throw new Error('this PDF is password-protected. Remove the password first, then try again.');
+      }
+      throw e;
+    }
+    const ctx = pdfDoc.context;
+    const candidates = [];
+    for (const [ref, obj] of ctx.enumerateIndirectObjects()) {
+      if (!(obj instanceof PDFRawStream)) continue;
+      const d = obj.dict;
+      const subtype = d.lookup(PDFName.of('Subtype'));
+      if (!subtype || subtype.toString() !== '/Image') continue;
+      let filter = d.lookup(PDFName.of('Filter'));
+      if (filter instanceof PDFArray) { if (filter.size() !== 1) continue; filter = filter.lookup(0); }
+      if (!filter || filter.toString() !== '/DCTDecode') continue;      // JPEG only
+      if (d.has(PDFName.of('Mask'))) continue;                          // colour-key mask would break
+      const isMask = d.lookup(PDFName.of('ImageMask'));
+      if (isMask && isMask.toString() === 'true') continue;
+      if (obj.contents.length < MIN_IMAGE_BYTES) continue;
+      candidates.push({ ref, obj });
+    }
+
+    let replaced = 0;
+    for (let i = 0; i < candidates.length; i++) {
+      statusText.textContent = 'Optimizing image ' + (i + 1) + ' of ' + candidates.length + '\u2026';
+      bar.style.width = Math.round(((i + 1) / candidates.length) * 90) + '%';
+      const { ref, obj } = candidates[i];
+      try {
+        const res = await shrinkJpeg(obj.contents, maxDim, quality);
+        if (!res) continue;
+        const newDict = ctx.obj({
+          Type: 'XObject', Subtype: 'Image', Width: res.w, Height: res.h,
+          ColorSpace: 'DeviceRGB', BitsPerComponent: 8, Filter: 'DCTDecode',
+        });
+        const smask = obj.dict.get(PDFName.of('SMask'));
+        if (smask) newDict.set(PDFName.of('SMask'), smask);
+        ctx.assign(ref, PDFRawStream.of(newDict, res.bytes));
+        replaced++;
+      } catch (e) {
+        // leave this image untouched
+      }
+    }
+    statusText.textContent = 'Saving\u2026';
+    bar.style.width = '95%';
+    const bytes = await pdfDoc.save({ useObjectStreams: true });
+    return { bytes, replaced, found: candidates.length };
+  }
+
+  // ---- Mode 2: rasterize --------------------------------------------------
+  async function compressRasterize(buf) {
+    const { scale, quality } = RASTER[level.value];
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    const { jsPDF } = window.jspdf;
+    let doc = null;
+    for (let i = 1; i <= pdf.numPages; i++) {
+      statusText.textContent = 'Compressing page ' + i + ' of ' + pdf.numPages + '\u2026';
+      bar.style.width = Math.round((i / pdf.numPages) * 100) + '%';
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width; canvas.height = viewport.height;
+      const ctx = canvas.getContext('2d');
+      // PDF pages render onto a transparent canvas; fill white so JPEG doesn't turn it black
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      const wPt = viewport.width / scale;
+      const hPt = viewport.height / scale;
+      const orientation = wPt > hPt ? 'l' : 'p';
+      if (!doc) doc = new jsPDF({ orientation, unit: 'pt', format: [wPt, hPt] });
+      else doc.addPage([wPt, hPt], orientation);
+      doc.addImage(dataUrl, 'JPEG', 0, 0, wPt, hPt);
+    }
+    return { bytes: doc.output('arraybuffer') };
+  }
+
+  compressBtn.addEventListener('click', async () => {
+    if (!currentFile) return;
+    hideError(err);
+    const keepText = mode.value === 'keep';
+    if (keepText && !window.PDFLib) { showError(err, "Couldn't load the PDF engine. Check your connection and try again."); return; }
+    if (!keepText && (!window.pdfjsLib || !window.jspdf)) { showError(err, "Couldn't load the PDF engine. Check your connection and try again."); return; }
+    compressBtn.disabled = true;
+    status.style.display = 'block';
+    resultBox.style.display = 'none';
+    statusText.textContent = 'Reading PDF\u2026';
+    bar.style.width = '5%';
+    try {
+      const buf = await currentFile.arrayBuffer();
+      const result = keepText ? await compressKeepText(buf) : await compressRasterize(buf);
+      const blob = new Blob([result.bytes], { type: 'application/pdf' });
+      const pct = Math.round((1 - blob.size / currentFile.size) * 100);
+      resultBox.style.display = 'block';
+      if (keepText && blob.size >= currentFile.size) {
+        newSize.textContent = 'No savings';
+        sizeSub.textContent = 'This PDF is already compact in this mode \u2014 its size comes from text, fonts or graphics that Keep text leaves alone. If you don\u2019t need searchable text, try Rasterize.';
+        statusText.textContent = 'Done. No smaller version found, so nothing was downloaded.';
+        bar.style.width = '100%';
+        return;
+      }
+      newSize.textContent = humanFileSize(blob.size);
+      let sub = pct > 0 ? ('about ' + pct + '% smaller than the original ' + humanFileSize(currentFile.size)) : ('original was ' + humanFileSize(currentFile.size));
+      if (keepText) sub += ' \u00b7 ' + result.replaced + ' of ' + result.found + ' JPEG image' + (result.found === 1 ? '' : 's') + ' recompressed \u00b7 text still selectable';
+      sizeSub.textContent = sub;
+      downloadBlob(blob, stripExt(currentFile.name) + '-compressed.pdf');
+      statusText.textContent = 'Done.';
+      bar.style.width = '100%';
+    } catch (e) {
+      showError(err, 'Could not compress that PDF: ' + e.message);
+    } finally {
+      compressBtn.disabled = false;
+    }
+  });
+})();"""
+
+
 def gen_compress_pdf():
     slug = "compress-pdf.html"
     body = f"""<main class="tool-shell">
   <div class="wrap">
     {breadcrumb('Compress PDF')}
     <div class="tool-head">
-      {tool_head('Optimize', 'Compress PDF', 'Shrink a PDF by re-rendering its pages at a quality you choose.')}
+      {tool_head('Optimize', 'Compress PDF', 'Shrink a PDF while keeping its text searchable, or re-render pages for the smallest possible file.')}
     </div>
     <div class="error-box show" style="background:#F6FBFA;border-color:var(--primary-tint-border);color:var(--primary-hover)">
-      <strong>How this works:</strong> each page is re-rendered as an image and reassembled into a new PDF. This gets scanned and photo-heavy PDFs much smaller, but the output's text is no longer selectable or searchable. For a text document you need to keep searchable, this isn't the right tool.
+      <strong>Two ways to compress:</strong> <em>Keep text</em> recompresses the JPEG images inside your PDF and leaves text, fonts and links alone, so it stays searchable &mdash; but it only helps PDFs that contain JPEG images. <em>Rasterize</em> turns every page into an image, which usually shrinks scans and image-heavy files much more, but the text is no longer selectable or searchable.
     </div>
     <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload PDF" style="margin-top:18px">
       {DZ_SVG}
@@ -479,6 +679,14 @@ def gen_compress_pdf():
         <div class="field">
           <label>Loaded PDF</label>
           <div id="file-info" style="font-family:var(--font);font-size:13px;color:var(--text-muted)"></div>
+        </div>
+        <div class="field">
+          <label for="mode">Mode</label>
+          <select id="mode">
+            <option value="keep" selected>Keep text searchable (lighter)</option>
+            <option value="raster">Rasterize pages (smallest file)</option>
+          </select>
+          <p class="note" id="mode-note"></p>
         </div>
         <div class="field">
           <label for="level">Compression level</label>
@@ -505,97 +713,12 @@ def gen_compress_pdf():
   </div>
 </main>
 """
-    script = f"""{PDFJS}
-{JSPDF}
-<script src="../js/file-utils.js?v=202611031215"></script>
-<script>
-(function(){{
-  const dz = document.getElementById('dz');
-  const input = document.getElementById('file-input');
-  const err = document.getElementById('error');
-  const optionsWrap = document.getElementById('options-wrap');
-  const fileInfo = document.getElementById('file-info');
-  const level = document.getElementById('level');
-  const compressBtn = document.getElementById('compress-btn');
-  const status = document.getElementById('status');
-  const bar = document.getElementById('bar');
-  const statusText = document.getElementById('status-text');
-  const resultBox = document.getElementById('result-box');
-  const newSize = document.getElementById('new-size');
-  const sizeSub = document.getElementById('size-sub');
-  let currentFile = null;
-
-  const LEVELS = {{
-    high: {{ scale: 1.0, quality: 0.5 }},
-    balanced: {{ scale: 1.5, quality: 0.7 }},
-    low: {{ scale: 2.0, quality: 0.85 }},
-  }};
-
-  setupDropzone(dz, input, async (files) => {{
-    hideError(err);
-    const file = files[0];
-    if (file.type !== 'application/pdf') {{ showError(err, 'Please choose a PDF file.'); return; }}
-    if (!window.pdfjsLib || !window.jspdf) {{ showError(err, "Couldn't load the PDF engine. Check your connection and try again."); return; }}
-    currentFile = file;
-    fileInfo.textContent = file.name + '  \\u00b7  ' + humanFileSize(file.size);
-    optionsWrap.style.display = 'grid';
-    resultBox.style.display = 'none';
-  }});
-
-  compressBtn.addEventListener('click', async () => {{
-    if (!currentFile) return;
-    hideError(err);
-    compressBtn.disabled = true;
-    status.style.display = 'block';
-    resultBox.style.display = 'none';
-    statusText.textContent = 'Reading PDF\\u2026';
-    bar.style.width = '5%';
-    try {{
-      const {{ scale, quality }} = LEVELS[level.value];
-      const buf = await currentFile.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({{ data: buf }}).promise;
-      const {{ jsPDF }} = window.jspdf;
-      let doc = null;
-      for (let i = 1; i <= pdf.numPages; i++) {{
-        statusText.textContent = 'Compressing page ' + i + ' of ' + pdf.numPages + '\\u2026';
-        bar.style.width = Math.round((i / pdf.numPages) * 100) + '%';
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({{ scale }});
-        const canvas = document.createElement('canvas');
-        canvas.width = viewport.width; canvas.height = viewport.height;
-        const ctx = canvas.getContext('2d');
-        // PDF pages render onto a transparent canvas; fill white so JPEG doesn't turn it black
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        await page.render({{ canvasContext: ctx, viewport }}).promise;
-        const dataUrl = canvas.toDataURL('image/jpeg', quality);
-        const wPt = viewport.width / scale;
-        const hPt = viewport.height / scale;
-        const orientation = wPt > hPt ? 'l' : 'p';
-        if (!doc) doc = new jsPDF({{ orientation, unit: 'pt', format: [wPt, hPt] }});
-        else doc.addPage([wPt, hPt], orientation);
-        doc.addImage(dataUrl, 'JPEG', 0, 0, wPt, hPt);
-      }}
-      const outBytes = doc.output('arraybuffer');
-      const blob = new Blob([outBytes], {{ type: 'application/pdf' }});
-      const pct = Math.round((1 - blob.size / currentFile.size) * 100);
-      newSize.textContent = humanFileSize(blob.size);
-      sizeSub.textContent = pct > 0 ? ('about ' + pct + '% smaller than the original ' + humanFileSize(currentFile.size)) : ('original was ' + humanFileSize(currentFile.size));
-      resultBox.style.display = 'block';
-      downloadBlob(blob, stripExt(currentFile.name) + '-compressed.pdf');
-      statusText.textContent = 'Done.';
-    }} catch (e) {{
-      showError(err, 'Could not compress that PDF: ' + e.message);
-    }} finally {{
-      compressBtn.disabled = false;
-    }}
-  }});
-}})();
-</script>
-"""
+    script = (PDFJS + "\n" + JSPDF + "\n" + PDFLIB +
+              '\n<script src="../js/file-utils.js?v=202611031215"></script>\n<script>\n' +
+              COMPRESS_JS + "\n</script>\n")
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
         title="Compress PDF &mdash; Shrink PDF File Size Free | Toolpeg",
-        description="Shrink a PDF's file size by re-rendering its pages at a quality you choose. Best for scanned and image-heavy PDFs.",
+        description="Shrink a PDF's file size free in your browser. Keep text searchable by recompressing embedded images, or rasterize pages for the smallest file.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="pdf", body=body, slug=slug, foot_scripts=script))
 
 
