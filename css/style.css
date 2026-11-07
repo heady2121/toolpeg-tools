@@ -283,3 +283,5 @@ article.prose{max-width:680px}
   .footer-grid{grid-template-columns:1fr 1fr}
   .trust-grid{grid-template-columns:1fr 1fr}
 }
+/* Hidden until an ad network approves the site. Delete this rule to bring the slot back. */
+.ad-slot { display: none !important; }
