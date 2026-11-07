@@ -161,6 +161,45 @@ TOOLS = {
 
 TOOL_INDEX = {t["slug"]: (cat, t) for cat, items in TOOLS.items() for t in items}
 
+# Hand-picked "Related tools" per tool (up to 4, in display order). Keyed by slug;
+# a pick may live in another category. A tool missing here falls back to the
+# first four siblings in its own category. An empty list hides the section.
+RELATED = {
+    # Image tools
+    "jpg-to-png.html": ["png-to-jpg.html", "jpg-to-webp.html", "image-compressor.html", "image-resizer.html"],
+    "png-to-jpg.html": ["jpg-to-png.html", "image-compressor.html", "image-resizer.html", "jpg-to-pdf.html"],
+    "jpg-to-webp.html": ["png-to-webp.html", "webp-to-jpg.html", "image-compressor.html", "image-resizer.html"],
+    "webp-to-jpg.html": ["jpg-to-webp.html", "png-to-jpg.html", "image-compressor.html", "image-resizer.html"],
+    "png-to-webp.html": ["jpg-to-webp.html", "image-compressor.html", "image-resizer.html", "png-to-jpg.html"],
+    "image-compressor.html": ["image-resizer.html", "image-cropper.html", "jpg-to-webp.html", "compress-pdf.html"],
+    "image-resizer.html": ["image-compressor.html", "image-cropper.html", "png-to-jpg.html", "jpg-to-webp.html"],
+    "image-cropper.html": ["image-resizer.html", "image-compressor.html", "png-to-jpg.html", "jpg-to-pdf.html"],
+    # PDF tools
+    "pdf-to-jpg.html": ["jpg-to-pdf.html", "split-pdf.html", "merge-pdf.html", "compress-pdf.html"],
+    "jpg-to-pdf.html": ["pdf-to-jpg.html", "merge-pdf.html", "compress-pdf.html", "image-compressor.html"],
+    "merge-pdf.html": ["split-pdf.html", "compress-pdf.html", "jpg-to-pdf.html", "pdf-to-jpg.html"],
+    "split-pdf.html": ["merge-pdf.html", "compress-pdf.html", "pdf-to-jpg.html", "jpg-to-pdf.html"],
+    "compress-pdf.html": ["merge-pdf.html", "split-pdf.html", "pdf-to-jpg.html", "image-compressor.html"],
+    # Student tools
+    "gpa-calculator.html": ["cgpa-calculator.html", "grade-calculator.html", "percentage-calculator.html", "attendance-calculator.html"],
+    "cgpa-calculator.html": ["gpa-calculator.html", "grade-calculator.html", "percentage-calculator.html", "attendance-calculator.html"],
+    "percentage-calculator.html": ["grade-calculator.html", "gpa-calculator.html", "standard-deviation-calculator.html", "scientific-calculator.html"],
+    "grade-calculator.html": ["gpa-calculator.html", "cgpa-calculator.html", "percentage-calculator.html", "attendance-calculator.html"],
+    "attendance-calculator.html": ["grade-calculator.html", "percentage-calculator.html", "gpa-calculator.html", "cgpa-calculator.html"],
+    "age-calculator.html": ["scientific-calculator.html", "percentage-calculator.html", "standard-deviation-calculator.html", "gpa-calculator.html"],
+    "standard-deviation-calculator.html": ["scientific-calculator.html", "percentage-calculator.html", "grade-calculator.html", "gpa-calculator.html"],
+    "scientific-calculator.html": ["percentage-calculator.html", "standard-deviation-calculator.html", "age-calculator.html", "gpa-calculator.html"],
+    # QR tools (only one tool in the category, so nothing to suggest yet)
+    "qr-code-generator.html": [],
+}
+
+# Fail loudly at build time on a typo, rather than silently dropping a card.
+for _slug, _picks in RELATED.items():
+    assert _slug in TOOL_INDEX, f"RELATED: unknown tool {_slug!r}"
+    for _p in _picks:
+        assert _p in TOOL_INDEX, f"RELATED[{_slug!r}]: unknown pick {_p!r}"
+        assert _p != _slug, f"RELATED[{_slug!r}]: lists itself"
+
 TAG_ICON = {
     "Convert": "\U0001F504", "Optimize": "\u26A1", "Resize": "\U0001F4D0",
     "Edit": "\U0001F58C\uFE0F", "Combine": "\U0001F517", "Split": "\u2702\uFE0F",
@@ -321,8 +360,26 @@ def _extra_seo_block(slug):
     faq_html = "\n          ".join(
         f'<div class="faq-item"><h3>{q}</h3><p>{a}</p></div>' for q, a in tool["faqs"]
     )
-    others = [t for t in TOOLS[category] if t["slug"] != slug][:4]
-    related_html = "\n".join(peg_card(t["slug"], t) for t in others)
+    if slug in RELATED:
+        picks = RELATED[slug]
+    else:  # fallback for a tool nobody has hand-picked yet
+        picks = [t["slug"] for t in TOOLS[category] if t["slug"] != slug][:4]
+    cards = []
+    for pick in picks:
+        pick_cat, pick_tool = TOOL_INDEX[pick]
+        href = pick if pick_cat == category else f"../{pick_cat}/{pick}"
+        cards.append(peg_card(href, pick_tool))
+    related_html = "\n".join(cards)
+    related_section = f"""
+  <section class="section" style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head"><h2>Related tools</h2></div>
+      <div class="tool-grid">
+{related_html}
+      </div>
+    </div>
+  </section>
+""" if cards else ""
     return f"""
   <section class="section tool-extra-section">
     <div class="wrap">
@@ -346,15 +403,7 @@ def _extra_seo_block(slug):
       </div>
     </div>
   </section>
-  <section class="section" style="border-top:1px solid var(--border)">
-    <div class="wrap">
-      <div class="section-head"><h2>Related tools</h2></div>
-      <div class="tool-grid">
-{related_html}
-      </div>
-    </div>
-  </section>
-"""
+{related_section}"""
 
 
 def TOOL_PAGE(title, description, canonical_path, depth, active, body, slug, foot_scripts=""):
