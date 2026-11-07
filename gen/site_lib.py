@@ -6,6 +6,11 @@ TOOLS registry so nav, footer, homepage cards, category pages, related-tool
 links and on-page SEO content can never drift out of sync with each other.
 """
 
+import html as _html
+import json
+import re
+from urllib.parse import urljoin
+
 SITE_NAME = "Toolpeg"
 SITE_DOMAIN = "https://toolpegtools.vercel.app"
 
@@ -303,8 +308,71 @@ def FOOTER(depth):
 """
 
 
+# ----------------------------------------------------------- structured data
+APP_CATEGORY = {
+    "image-tools": "MultimediaApplication",
+    "pdf-tools": "BusinessApplication",
+    "student-tools": "EducationalApplication",
+    "qr-tools": "UtilitiesApplication",
+}
+
+
+def _jsonld(data):
+    """One JSON-LD <script> block. '</' is escaped so text can never close the tag early."""
+    payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    return f'<script type="application/ld+json">{payload}</script>\n'
+
+
+def _breadcrumb_ld(body, canonical):
+    """BreadcrumbList built from the page's own visible breadcrumb (<p class="breadcrumb">),
+    so the markup always matches what visitors see. Pages without one (home, 404) get none."""
+    m = re.search(r'<p class="breadcrumb">(.*?)</p>', body, re.S)
+    if not m:
+        return ""
+    items = []
+    parts = m.group(1).split(" / ")
+    for i, part in enumerate(parts):
+        link = re.search(r'<a href="([^"]+)"[^>]*>(.*?)</a>', part, re.S)
+        name = _html.unescape(re.sub(r"<[^>]+>", "", link.group(2) if link else part)).strip()
+        if link:
+            url = urljoin(canonical, link.group(1))
+            if url.endswith("/index.html"):
+                url = url[: -len("index.html")]
+        else:
+            url = canonical  # last crumb is the current page
+        items.append({"@type": "ListItem", "position": i + 1, "name": name, "item": url})
+    return _jsonld({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items})
+
+
+def _tool_ld(slug, description, canonical):
+    """FAQPage + SoftwareApplication for a tool page, from the same TOOLS registry that renders the page."""
+    category, tool = TOOL_INDEX[slug]
+    faq = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+            for q, a in tool["faqs"]
+        ],
+    }
+    app = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": f"{tool['label']} \u2014 {SITE_NAME}",
+        "url": canonical,
+        "description": _html.unescape(description),
+        "applicationCategory": APP_CATEGORY.get(category, "UtilitiesApplication"),
+        "operatingSystem": "Any (runs in a web browser)",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": True,
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    }
+    return _jsonld(app) + _jsonld(faq)
+
+
 def PAGE(title, description, canonical_path, depth, active, body, head_extra="", foot_scripts=""):
     canonical = f"{SITE_DOMAIN}/{canonical_path}"
+    head_extra = _breadcrumb_ld(body, canonical) + head_extra
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -412,7 +480,9 @@ def TOOL_PAGE(title, description, canonical_path, depth, active, body, slug, foo
     """Like PAGE(), but for a tool page: appends the About/How-it-works/FAQ/
     ad-slot/related-tools block automatically, driven by TOOLS[category][slug]."""
     extra = _extra_seo_block(slug)
-    return PAGE(title, description, canonical_path, depth, active, body + extra, foot_scripts=foot_scripts)
+    canonical = f"{SITE_DOMAIN}/{canonical_path}"
+    return PAGE(title, description, canonical_path, depth, active, body + extra,
+                head_extra=_tool_ld(slug, description, canonical), foot_scripts=foot_scripts)
 
 
 def write(path, html):
