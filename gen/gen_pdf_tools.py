@@ -220,7 +220,11 @@ def gen_jpg_to_pdf():
         const x = (pageW - w) / 2, y = (pageH - h) / 2;
         const canvas = document.createElement('canvas');
         canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
-        canvas.getContext('2d').drawImage(img, 0, 0);
+        const ctx = canvas.getContext('2d');
+        // JPEG has no alpha channel, so fill white first or transparent pixels turn black
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
         const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
         doc.addImage(dataUrl, 'JPEG', x, y, w, h);
       }}
@@ -559,7 +563,11 @@ def gen_compress_pdf():
         const viewport = page.getViewport({{ scale }});
         const canvas = document.createElement('canvas');
         canvas.width = viewport.width; canvas.height = viewport.height;
-        await page.render({{ canvasContext: canvas.getContext('2d'), viewport }}).promise;
+        const ctx = canvas.getContext('2d');
+        // PDF pages render onto a transparent canvas; fill white so JPEG doesn't turn it black
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        await page.render({{ canvasContext: ctx, viewport }}).promise;
         const dataUrl = canvas.toDataURL('image/jpeg', quality);
         const wPt = viewport.width / scale;
         const hPt = viewport.height / scale;
