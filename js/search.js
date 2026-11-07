@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!input) return;
 
   const sections = Array.from(document.querySelectorAll('[data-section]'));
-  const cards = Array.from(document.querySelectorAll('.tool-grid .peg-card'));
+  const cards = Array.from(document.querySelectorAll('.peg-card'));
   const noResults = searchBox.querySelector('.no-results');
 
   function applyFilter() {

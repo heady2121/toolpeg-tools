@@ -12,7 +12,7 @@ CIRCUIT = (14, 138, 130)
 img = Image.new("RGB", (W, H), PAPER)
 draw = ImageDraw.Draw(img)
 
-# Subtle pegboard dot-grid background (matches .pegboard CSS pattern)
+# Subtle dot-grid background (matches .pegboard CSS pattern)
 step = 34
 r = 2
 for x in range(step, W, step):

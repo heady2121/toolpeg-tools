@@ -398,8 +398,8 @@ def gen_scientific():
     <div class="grid-2">
       <div>
         <div class="panel">
-          <input type="text" id="expr" style="width:100%;font-family:var(--font-mono);font-size:22px;border:none;text-align:right;background:transparent;color:var(--ink);padding:8px 4px 4px" value="" placeholder="0" autocomplete="off">
-          <div id="expr-result" style="text-align:right;font-family:var(--font-mono);color:var(--steel-light);font-size:13px;min-height:18px;padding:0 4px 12px">&nbsp;</div>
+          <input type="text" id="expr" style="width:100%;font-family:var(--font);font-size:22px;border:none;text-align:right;background:transparent;color:var(--text);padding:8px 4px 4px" value="" placeholder="0" autocomplete="off">
+          <div id="expr-result" style="text-align:right;font-family:var(--font);color:var(--text-faint);font-size:13px;min-height:18px;padding:0 4px 12px">&nbsp;</div>
           <div id="calc-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
             {''.join(key_html)}
           </div>
@@ -413,7 +413,7 @@ def gen_scientific():
         <div class="panel">
           <div class="field">
             <label>Memory</label>
-            <div id="mem-out" style="font-family:var(--font-mono);font-size:20px">0</div>
+            <div id="mem-out" style="font-family:var(--font);font-size:20px">0</div>
           </div>
           <div class="row">
             <button class="btn btn-outline" id="mc">MC</button>
@@ -507,9 +507,9 @@ def gen_scientific():
 })();
 </script>
 <style>
-  #calc-grid .calc-key{font-family:var(--font-mono);font-size:15px;padding:14px 0;border-radius:var(--radius);border:1px solid var(--hairline);background:#fff;cursor:pointer;transition:background .12s,border-color .12s}
-  #calc-grid .calc-key:hover{border-color:var(--ink)}
-  #calc-grid .key-eq{background:var(--signal);border-color:var(--signal);color:var(--signal-ink);font-weight:600}
+  #calc-grid .calc-key{font-family:var(--font);font-size:15px;padding:14px 0;border-radius:var(--radius);border:1px solid var(--border);background:#fff;cursor:pointer;transition:background .12s,border-color .12s}
+  #calc-grid .calc-key:hover{border-color:var(--text)}
+  #calc-grid .key-eq{background:var(--primary);border-color:var(--primary);color:var(--primary);font-weight:600}
 </style>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(

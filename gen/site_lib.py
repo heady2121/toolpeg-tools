@@ -161,27 +161,51 @@ TOOLS = {
 
 TOOL_INDEX = {t["slug"]: (cat, t) for cat, items in TOOLS.items() for t in items}
 
+TAG_ICON = {
+    "Convert": "\U0001F504", "Optimize": "\u26A1", "Resize": "\U0001F4D0",
+    "Edit": "\U0001F58C\uFE0F", "Combine": "\U0001F517", "Split": "\u2702\uFE0F",
+    "Grades": "\U0001F393", "Dates": "\U0001F4C5", "Statistics": "\U0001F4CA",
+    "Math": "\U0001F9EE", "Generate": "\U0001F4F1",
+}
+CATEGORY_ICON = {"image-tools": "\U0001F5BC\uFE0F", "pdf-tools": "\U0001F4C4", "student-tools": "\U0001F393", "qr-tools": "\U0001F4F1"}
+
+GITHUB_URL = "https://github.com/heady2121/toolpeg-tools"
+ASSET_V = "202611031215"  # bump on every release; forces browsers/CDN to refetch CSS+JS
+
 NAV_ITEMS = [("home", "Home", "index.html")] + [
     (info["nav_key"], info["label"], f"{cat}/index.html") for cat, info in CATEGORY_INFO.items()
-]
+] + [("guides", "Guides", "guides/index.html"), ("about", "About", "about.html")]
+
+ICON_SEARCH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
+ICON_SUN = '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
+ICON_MOON = '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>'
+ICON_MENU = '<svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>'
+ICON_CLOSE = '<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+ICON_GITHUB = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 007.87 10.94c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.2 1.78 1.2 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>'
 
 
 def _nav_html(depth, active):
     links = []
     for key, label, href in NAV_ITEMS:
         cls = ' class="active"' if key == active else ''
-        links.append(f'<a href="{depth}{href}"{cls}>{label}</a>')
+        aria = ' aria-current="page"' if key == active else ''
+        links.append(f'<a href="{depth}{href}"{cls}{aria}>{label}</a>')
     return "\n      ".join(links)
 
 
 def HEADER(depth, active):
+    search_target = f"{depth}index.html#tool-search" if active != "home" else "#tool-search"
     return f"""  <header class="site-header">
     <div class="wrap">
       <a href="{depth}index.html" class="logo"><span class="peg-dot"></span>{SITE_NAME}</a>
-      <nav class="main-nav" aria-label="Primary">
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
       {_nav_html(depth, active)}
       </nav>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="header-actions">
+        <a href="{search_target}" class="icon-btn" aria-label="Search tools">{ICON_SEARCH}</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">{ICON_SUN}{ICON_MOON}</button>
+        <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav">{ICON_MENU}{ICON_CLOSE}</button>
+      </div>
     </div>
   </header>
   <div class="status-strip">
@@ -198,19 +222,27 @@ def _footer_col(title, depth, items):
       </div>"""
 
 
+
 def FOOTER(depth):
-    company = [
-        ("about.html", "About"),
+    tools_col = _footer_col("Tools", depth, [
+        ("student-tools/index.html", "Student Tools"),
+        ("image-tools/index.html", "Image Tools"),
+        ("pdf-tools/index.html", "PDF Tools"),
+        ("qr-tools/index.html", "QR Tools"),
+    ])
+    resources_col = _footer_col("Resources", depth, [
         ("guides/index.html", "Guides"),
+        ("about.html", "About"),
         ("contact.html", "Contact"),
+    ])
+    legal_col = _footer_col("Legal", depth, [
         ("privacy-policy.html", "Privacy Policy"),
         ("terms.html", "Terms of Use"),
-    ]
-    image_col = _footer_col("Image Tools", depth, [(f"image-tools/{t['slug']}", t['label']) for t in TOOLS["image-tools"]])
-    pdf_col = _footer_col("PDF Tools", depth, [(f"pdf-tools/{t['slug']}", t['label']) for t in TOOLS["pdf-tools"]])
-    student_qr = [(f"student-tools/{t['slug']}", t['label']) for t in TOOLS["student-tools"]] + [(f"qr-tools/{t['slug']}", t['label']) for t in TOOLS["qr-tools"]]
-    student_col = _footer_col("Student &amp; QR", depth, student_qr)
-    company_col = _footer_col("Company", depth, company)
+    ])
+    social_col = f"""      <div>
+        <h4>Project</h4>
+        <a href="{GITHUB_URL}" target="_blank" rel="noopener">GitHub repo</a>
+      </div>"""
     return f"""  <footer class="site-footer">
     <div class="wrap">
       <div class="footer-grid">
@@ -218,14 +250,14 @@ def FOOTER(depth):
           <a href="{depth}index.html" class="logo"><span class="peg-dot"></span>{SITE_NAME}</a>
           <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
         </div>
-{image_col}
-{pdf_col}
-{student_col}
-{company_col}
+{tools_col}
+{resources_col}
+{legal_col}
+{social_col}
       </div>
       <div class="footer-bottom">
         <span>&copy; <span data-year></span> {SITE_NAME}. All tools run client-side in your browser.</span>
-        <a href="{depth}privacy-policy.html">Privacy</a>
+        <a href="{GITHUB_URL}" target="_blank" rel="noopener" class="gh-link">{ICON_GITHUB}GitHub</a>
       </div>
     </div>
   </footer>
@@ -238,6 +270,7 @@ def PAGE(title, description, canonical_path, depth, active, body, head_extra="",
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>(function(){{try{{var t=localStorage.getItem('toolpeg-theme');if(!t){{t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}}document.documentElement.setAttribute('data-theme',t);}}catch(e){{}}}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
 <meta name="description" content="{description}">
@@ -253,14 +286,14 @@ def PAGE(title, description, canonical_path, depth, active, body, head_extra="",
 <meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="{SITE_DOMAIN}/og-image.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="{depth}css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230F172A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%234F46E5'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="{depth}css/style.css?v={ASSET_V}">
 {head_extra}</head>
 <body>
 {HEADER(depth, active)}
 {body}
 {FOOTER(depth)}
-<script src="{depth}js/main.js"></script>
+<script src="{depth}js/main.js?v={ASSET_V}"></script>
 {foot_scripts}</body>
 </html>
 """
@@ -268,11 +301,13 @@ def PAGE(title, description, canonical_path, depth, active, body, head_extra="",
 
 def peg_card(href, tool):
     search_key = f"{tool['label']} {tool['tag']} {tool['card_desc']}".lower().replace('"', '&quot;')
+    icon = TAG_ICON.get(tool['tag'], "\U0001F527")
     return f"""<a class="peg-card" href="{href}" data-name="{search_key}">
+        <span class="icon" aria-hidden="true">{icon}</span>
         <span class="tag">{tool['tag']}</span>
         <h3>{tool['label']}</h3>
         <p>{tool['card_desc']}</p>
-        <span class="go">Open tool</span>
+        <span class="go">Open tool<span class="sr-only"> for {tool['label']}</span></span>
       </a>"""
 
 
@@ -311,7 +346,7 @@ def _extra_seo_block(slug):
       </div>
     </div>
   </section>
-  <section class="section" style="border-top:1px solid var(--hairline)">
+  <section class="section" style="border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="section-head"><h2>Related tools</h2></div>
       <div class="tool-grid">

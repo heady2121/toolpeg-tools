@@ -1,41 +1,123 @@
 # -*- coding: utf-8 -*-
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from site_lib import PAGE, write, TOOLS, CATEGORY_INFO, cards_for_category
+from site_lib import PAGE, write, TOOLS, CATEGORY_INFO, CATEGORY_ICON, GITHUB_URL, TOOL_INDEX, cards_for_category, peg_card
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 
-SEARCH_SVG = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>"""
+SEARCH_SVG = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>"""
+
+POPULAR_SLUGS = [
+    "scientific-calculator.html", "gpa-calculator.html", "qr-code-generator.html",
+    "image-compressor.html", "compress-pdf.html", "percentage-calculator.html",
+]
+POPULAR_CHIPS = [
+    ("student-tools/scientific-calculator.html", "Scientific Calculator"),
+    ("pdf-tools/index.html", "PDF Tools"),
+    ("qr-tools/qr-code-generator.html", "QR Generator"),
+    ("image-tools/image-compressor.html", "Image Compressor"),
+    ("student-tools/gpa-calculator.html", "GPA Calculator"),
+]
+
+GUIDE_CARDS = [
+    ("jpg-vs-png.html", "Guide", "JPG vs PNG: Which Should You Use?",
+     "A plain-language guide to picking the right image format, with a quick decision rule you can use every time."),
+    ("compress-image-without-losing-quality.html", "Guide", "How to Compress an Image Without Losing (Much) Quality",
+     "The real levers that shrink a file size — format, dimensions and quality — and the order to use them in."),
+    ("how-to-calculate-gpa.html", "Guide", "How to Calculate GPA (With Formula)",
+     "The credit-weighted GPA formula, a worked example, and how GPA differs from CGPA."),
+]
+
+CATEGORY_DESC = {
+    "student-tools": "Calculate grades, GPA, attendance and more.",
+    "image-tools": "Compress, resize, crop and convert images.",
+    "pdf-tools": "Merge, split, compress and convert PDFs.",
+    "qr-tools": "Generate QR codes quickly.",
+}
 
 
 # ---------------------------------------------------------------- homepage
 def gen_home():
     n_image, n_pdf, n_student, n_qr = (len(TOOLS[k]) for k in ["image-tools", "pdf-tools", "student-tools", "qr-tools"])
-    body = f"""<main>
-  <section class="hero pegboard">
-    <div class="wrap">
-      <span class="eyebrow">100% free &middot; no sign-up &middot; nothing leaves your device</span>
-      <h1>Tools that just work,<br>right in your browser.</h1>
-      <p class="lede">Toolpeg is a set of free online image, PDF and student tools &mdash; convert images, wrangle PDFs, and run the calculators students actually search for. Every tool processes your file locally, with no account, no watermark and no upload wait.</p>
-      <div class="hero-actions">
-        <a href="#image" class="btn btn-signal">Browse image tools</a>
-        <a href="#pdf" class="btn btn-outline">Browse PDF tools</a>
-      </div>
-    </div>
-  </section>
+    total = n_image + n_pdf + n_student + n_qr
 
-  <section class="section" style="padding-bottom:0">
+    chips_html = "\n        ".join(f'<a href="{href}" class="chip">{label}</a>' for href, label in POPULAR_CHIPS)
+
+    popular_cards = "\n".join(
+        peg_card(f"{cat}/{slug}", TOOL_INDEX[slug][1]) for slug in POPULAR_SLUGS for cat in [TOOL_INDEX[slug][0]]
+    )
+
+    category_cards = "\n".join(f"""      <a class="category-card" href="{cat}/index.html">
+        <span class="icon" aria-hidden="true">{CATEGORY_ICON[cat]}</span>
+        <h3>{CATEGORY_INFO[cat]['label']}</h3>
+        <p>{CATEGORY_DESC[cat]}</p>
+      </a>""" for cat in ["student-tools", "image-tools", "pdf-tools", "qr-tools"])
+    category_cards += f"""
+      <a class="category-card" href="guides/index.html">
+        <span class="icon" aria-hidden="true">\U0001F4DA</span>
+        <h3>Guides</h3>
+        <p>Learn how to use digital tools effectively.</p>
+      </a>"""
+
+    guide_cards_html = "\n".join(f"""      <a class="guide-card" href="guides/{slug}">
+        <span class="tag">{tag}</span>
+        <h3>{title}</h3>
+        <p>{desc}</p>
+        <span class="go">Read guide &rarr;</span>
+      </a>""" for slug, tag, title, desc in GUIDE_CARDS)
+
+    body = f"""<main>
+  <section class="hero">
     <div class="wrap">
+      <span class="eyebrow">Free tools for everyday digital tasks</span>
+      <h1>Calculators, converters, PDF and image tools &mdash; all in one place.</h1>
+      <p class="lede">{total} free utilities for images, PDFs, QR codes and student calculations. Every tool runs locally in your browser: no account, no watermark, no upload wait.</p>
       <label class="tool-search" id="tool-search">
         <span class="sr-only">Search tools</span>
         {SEARCH_SVG}
         <input type="text" id="search-input" placeholder="Search tools&hellip; e.g. compress, GPA, QR" autocomplete="off">
         <p class="no-results">No tools match that search &mdash; try a different word.</p>
       </label>
+      <div class="popular-row">
+        <span class="label">Popular:</span>
+        {chips_html}
+      </div>
     </div>
   </section>
 
-  <section class="section" id="image" data-section>
+  <section class="section" id="categories">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Explore by category</h2>
+      </div>
+      <div class="category-grid">
+{category_cards}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="popular" data-section style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Popular tools</h2>
+        <p>Good starting points if you're new here.</p>
+      </div>
+      <div class="popular-grid">
+{popular_cards}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Explore our tools</h2>
+        <span class="section-tag">{total} tools total</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="image" data-section style="padding-top:0">
     <div class="wrap">
       <div class="section-head">
         <h2>Image tools</h2>
@@ -47,7 +129,7 @@ def gen_home():
     </div>
   </section>
 
-  <section class="section" id="pdf" data-section style="border-top:1px solid var(--hairline)">
+  <section class="section" id="pdf" data-section style="border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="section-head">
         <h2>PDF tools</h2>
@@ -59,7 +141,7 @@ def gen_home():
     </div>
   </section>
 
-  <section class="section" id="student" data-section style="border-top:1px solid var(--hairline)">
+  <section class="section" id="student" data-section style="border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="section-head">
         <h2>Student tools</h2>
@@ -71,7 +153,7 @@ def gen_home():
     </div>
   </section>
 
-  <section class="section" id="qr" data-section style="border-top:1px solid var(--hairline)">
+  <section class="section" id="qr" data-section style="border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="section-head">
         <h2>QR tools</h2>
@@ -83,42 +165,50 @@ def gen_home():
     </div>
   </section>
 
-  <section class="section" style="border-top:1px solid var(--hairline)">
+  <section class="section" style="border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="section-head">
-        <h2>Why use Toolpeg</h2>
-        <span class="section-tag">how it works</span>
+        <h2>Helpful guides</h2>
+        <p>Short, practical explainers behind the tools.</p>
+      </div>
+      <div class="guide-grid">
+{guide_cards_html}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Why Toolpeg</h2>
       </div>
       <div class="trust-grid">
         <div class="trust-item">
-          <span class="num">01</span>
-          <h3>Your file stays on your device</h3>
-          <p>Every tool uses your browser's own engine to read, edit and export files &mdash; nothing is sent to a server, so there's no upload wait and no privacy trade-off.</p>
+          <span class="icon" aria-hidden="true">\u26A1</span>
+          <h3>Fast</h3>
+          <p>Tools are designed to be simple and quick &mdash; open one and use it, no setup.</p>
         </div>
         <div class="trust-item">
-          <span class="num">02</span>
-          <h3>No account, no watermark</h3>
-          <p>Open a tool and use it. There's no sign-up wall, no daily limit, and no logo stamped on your output.</p>
+          <span class="icon" aria-hidden="true">\U0001F512</span>
+          <h3>Privacy-focused</h3>
+          <p>Where possible, files are processed locally in your browser instead of being uploaded to a server.</p>
         </div>
         <div class="trust-item">
-          <span class="num">03</span>
-          <h3>Works on any device</h3>
-          <p>The layout adapts from a phone in one hand to a widescreen monitor, so the same tool works before class or at a desk.</p>
+          <span class="icon" aria-hidden="true">\U0001F4F1</span>
+          <h3>Works everywhere</h3>
+          <p>A responsive experience across desktop, tablet and mobile.</p>
+        </div>
+        <div class="trust-item">
+          <span class="icon" aria-hidden="true">\U0001F193</span>
+          <h3>Free to use</h3>
+          <p>Every tool listed here is free, with no sign-up required.</p>
         </div>
       </div>
-      <ul style="list-style:none;padding:0;margin:28px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
-        <li style="font-size:13.5px;color:var(--steel)">&#10003;&nbsp; 100% free, every tool</li>
-        <li style="font-size:13.5px;color:var(--steel)">&#10003;&nbsp; No registration required</li>
-        <li style="font-size:13.5px;color:var(--steel)">&#10003;&nbsp; No files uploaded to a server</li>
-        <li style="font-size:13.5px;color:var(--steel)">&#10003;&nbsp; Works on mobile and desktop</li>
-        <li style="font-size:13.5px;color:var(--steel)">&#10003;&nbsp; No watermark on your output</li>
-        <li style="font-size:13.5px;color:var(--steel)">&#10003;&nbsp; No daily usage limit</li>
-      </ul>
     </div>
   </section>
 </main>
 """
-    script = """<script src="js/search.js"></script>\n"""
+    script = """<script src="js/search.js?v=202611031215"></script>\n"""
     html = PAGE(
         title="Toolpeg — Free Image, PDF & Student Tools (No Sign-up)",
         description="Free browser-based tools: JPG/PNG/WebP converters, image compressor and resizer, merge/split/compress PDF, GPA and CGPA calculators, QR code generator, and more.",
@@ -189,13 +279,25 @@ def gen_about():
     <span class="eyebrow">About Toolpeg</span>
     <h1>Small tools, built to be used, not signed up for.</h1>
     <div class="prose">
+      <h2 style="margin-top:0">What Toolpeg is</h2>
       <p>Toolpeg is a collection of {total} single-purpose utilities for the things people look up constantly: converting an image format, shrinking a PDF, working out a GPA. Each tool is built to do exactly one job well, load fast, and get out of the way.</p>
+      <h2>Why it was created</h2>
+      <p>Toolpeg started as a personal project &mdash; a way to build something genuinely useful end-to-end, from picking a tool people actually search for, to shipping a working version of it. It's also a portfolio project: every tool here reflects real, working code, not a mockup.</p>
+      <h2>What you can do here</h2>
+      <p>Convert and compress images, merge or split PDFs, generate a QR code, or run the calculators students use every semester (GPA, CGPA, attendance, grades) &mdash; all without creating an account or installing anything.</p>
       <h2>How the tools work</h2>
       <p>Every image, PDF and calculator tool on this site runs entirely in your browser using standard web technology (the Canvas API for images, and open-source libraries for PDF handling). Your files are never uploaded to a server &mdash; they're processed on your own device and the output is generated locally, then offered to you as a download.</p>
-      <h2>Why it's free</h2>
-      <p>The site is supported by advertising rather than subscriptions, so every tool stays free and usable without an account.</p>
-      <h2>Feedback</h2>
-      <p>If a tool doesn't work the way you expect, or you'd like to see a new one added, the <a href="contact.html">contact page</a> is the fastest way to reach us.</p>
+      <h2>Core principles</h2>
+      <ul>
+        <li>One tool, one job &mdash; no bloated all-in-one dashboards.</li>
+        <li>No account required to use anything.</li>
+        <li>Process files locally wherever that's technically possible.</li>
+        <li>No fake statistics, no fake reviews, no invented team.</li>
+      </ul>
+      <h2>About the developer</h2>
+      <p>Toolpeg is built and maintained by <strong>Abdul Hadi</strong>, a computer science student and web developer. It's an actively developed personal project &mdash; the <a href="{GITHUB_URL}" target="_blank" rel="noopener">source is on GitHub</a> if you're curious how it's built.</p>
+      <h2>Get started</h2>
+      <p>Head back to the <a href="index.html">homepage</a> to browse every tool, or jump straight to <a href="image-tools/index.html">Image Tools</a>, <a href="pdf-tools/index.html">PDF Tools</a>, or <a href="student-tools/index.html">Student Tools</a>.</p>
     </div>
   </div>
 </main>
@@ -203,7 +305,7 @@ def gen_about():
     write(os.path.join(ROOT, "about.html"), PAGE(
         title="About Toolpeg — Free Browser-Based Tools",
         description="Toolpeg builds free, single-purpose image, PDF and student tools that run entirely in your browser.",
-        canonical_path="about.html", depth="", active=None, body=body))
+        canonical_path="about.html", depth="", active="about", body=body))
 
 
 def gen_contact(email="youraddress@gmail.com"):
@@ -289,15 +391,15 @@ def gen_terms():
 
 def gen_404():
     body = """<main class="tool-shell">
-  <div class="wrap" style="text-align:center;padding:60px 0">
-    <span class="eyebrow" style="justify-content:center">404</span>
-    <h1>That page moved or never existed.</h1>
-    <p class="lede" style="margin:0 auto 28px">Try the homepage, or jump straight to a category below.</p>
-    <div class="hero-actions" style="justify-content:center">
-      <a href="/index.html" class="btn btn-signal">Back to homepage</a>
-      <a href="/image-tools/index.html" class="btn btn-outline">Image tools</a>
-      <a href="/pdf-tools/index.html" class="btn btn-outline">PDF tools</a>
-      <a href="/student-tools/index.html" class="btn btn-outline">Student tools</a>
+  <div class="wrap">
+    <div class="error-page">
+      <span class="code">404</span>
+      <h1>Oops! This tool could not be found.</h1>
+      <p class="lede" style="margin:0 auto">The page you're looking for may have moved or no longer exists.</p>
+      <div class="actions">
+        <a href="/index.html" class="btn btn-primary">Back to Home</a>
+        <a href="/index.html#categories" class="btn btn-outline">Explore Tools</a>
+      </div>
     </div>
   </div>
 </main>

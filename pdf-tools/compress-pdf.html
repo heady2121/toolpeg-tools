@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('toolpeg-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compress PDF &mdash; Shrink PDF File Size Free | Toolpeg</title>
 <meta name="description" content="Shrink a PDF's file size by re-rendering its pages at a quality you choose. Best for scanned and image-heavy PDFs.">
@@ -17,21 +18,27 @@
 <meta property="og:image:alt" content="Toolpeg — free image, PDF and student tools that run in your browser">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://toolpegtools.vercel.app/og-image.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FFB020'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230F172A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%234F46E5'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/style.css?v=202611031215">
 </head>
 <body>
   <header class="site-header">
     <div class="wrap">
       <a href="../index.html" class="logo"><span class="peg-dot"></span>Toolpeg</a>
-      <nav class="main-nav" aria-label="Primary">
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
       <a href="../index.html">Home</a>
       <a href="../image-tools/index.html">Image Tools</a>
-      <a href="../pdf-tools/index.html" class="active">PDF Tools</a>
+      <a href="../pdf-tools/index.html" class="active" aria-current="page">PDF Tools</a>
       <a href="../student-tools/index.html">Student Tools</a>
       <a href="../qr-tools/index.html">QR Tools</a>
+      <a href="../guides/index.html">Guides</a>
+      <a href="../about.html">About</a>
       </nav>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="header-actions">
+        <a href="../index.html#tool-search" class="icon-btn" aria-label="Search tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
+        <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav"><svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
     </div>
   </header>
   <div class="status-strip">
@@ -46,7 +53,7 @@
     <h1>Compress PDF</h1>
     <p>Shrink a PDF by re-rendering its pages at a quality you choose.</p>
     </div>
-    <div class="error-box show" style="background:#F6FBFA;border-color:var(--circuit-tint-line);color:var(--circuit-dark)">
+    <div class="error-box show" style="background:#F6FBFA;border-color:var(--primary-tint-border);color:var(--primary-hover)">
       <strong>How this works:</strong> each page is re-rendered as an image and reassembled into a new PDF. This gets scanned and photo-heavy PDFs much smaller, but the output's text is no longer selectable or searchable. For a text document you need to keep searchable, this isn't the right tool.
     </div>
     <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload PDF" style="margin-top:18px">
@@ -60,7 +67,7 @@
       <div class="panel">
         <div class="field">
           <label>Loaded PDF</label>
-          <div id="file-info" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)"></div>
+          <div id="file-info" style="font-family:var(--font);font-size:13px;color:var(--text-muted)"></div>
         </div>
         <div class="field">
           <label for="level">Compression level</label>
@@ -72,7 +79,7 @@
         </div>
       </div>
       <div class="panel">
-        <button class="btn btn-signal btn-block" id="compress-btn">Compress &amp; download</button>
+        <button class="btn btn-primary btn-block" id="compress-btn">Compress &amp; download</button>
         <div id="status" style="display:none;margin-top:14px">
           <div class="progress"><i id="bar"></i></div>
           <p class="note" id="status-text"></p>
@@ -112,33 +119,37 @@
       </div>
     </div>
   </section>
-  <section class="section" style="border-top:1px solid var(--hairline)">
+  <section class="section" style="border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="section-head"><h2>Related tools</h2></div>
       <div class="tool-grid">
 <a class="peg-card" href="pdf-to-jpg.html" data-name="pdf to jpg convert turn every page of a pdf into a downloadable jpg image.">
+        <span class="icon" aria-hidden="true">🔄</span>
         <span class="tag">Convert</span>
         <h3>PDF to JPG</h3>
         <p>Turn every page of a PDF into a downloadable JPG image.</p>
-        <span class="go">Open tool</span>
+        <span class="go">Open tool<span class="sr-only"> for PDF to JPG</span></span>
       </a>
 <a class="peg-card" href="jpg-to-pdf.html" data-name="jpg to pdf convert combine one or more jpg/png photos into a single pdf document.">
+        <span class="icon" aria-hidden="true">🔄</span>
         <span class="tag">Convert</span>
         <h3>JPG to PDF</h3>
         <p>Combine one or more JPG/PNG photos into a single PDF document.</p>
-        <span class="go">Open tool</span>
+        <span class="go">Open tool<span class="sr-only"> for JPG to PDF</span></span>
       </a>
 <a class="peg-card" href="merge-pdf.html" data-name="merge pdf combine stack multiple pdfs into one file, in the order you choose.">
+        <span class="icon" aria-hidden="true">🔗</span>
         <span class="tag">Combine</span>
         <h3>Merge PDF</h3>
         <p>Stack multiple PDFs into one file, in the order you choose.</p>
-        <span class="go">Open tool</span>
+        <span class="go">Open tool<span class="sr-only"> for Merge PDF</span></span>
       </a>
 <a class="peg-card" href="split-pdf.html" data-name="split pdf split pull specific pages out of a pdf, or split it into single pages.">
+        <span class="icon" aria-hidden="true">✂️</span>
         <span class="tag">Split</span>
         <h3>Split PDF</h3>
         <p>Pull specific pages out of a PDF, or split it into single pages.</p>
-        <span class="go">Open tool</span>
+        <span class="go">Open tool<span class="sr-only"> for Split PDF</span></span>
       </a>
       </div>
     </div>
@@ -152,57 +163,40 @@
           <p>Free browser-based tools for images, PDFs, and everyday student calculations. No installs, no accounts, no file uploads to a server.</p>
         </div>
       <div>
-        <h4>Image Tools</h4>
-        <a href="../image-tools/jpg-to-png.html">JPG to PNG</a>
-        <a href="../image-tools/png-to-jpg.html">PNG to JPG</a>
-        <a href="../image-tools/jpg-to-webp.html">JPG to WebP</a>
-        <a href="../image-tools/webp-to-jpg.html">WebP to JPG</a>
-        <a href="../image-tools/png-to-webp.html">PNG to WebP</a>
-        <a href="../image-tools/image-compressor.html">Image Compressor</a>
-        <a href="../image-tools/image-resizer.html">Image Resizer</a>
-        <a href="../image-tools/image-cropper.html">Image Cropper</a>
+        <h4>Tools</h4>
+        <a href="../student-tools/index.html">Student Tools</a>
+        <a href="../image-tools/index.html">Image Tools</a>
+        <a href="../pdf-tools/index.html">PDF Tools</a>
+        <a href="../qr-tools/index.html">QR Tools</a>
       </div>
       <div>
-        <h4>PDF Tools</h4>
-        <a href="../pdf-tools/pdf-to-jpg.html">PDF to JPG</a>
-        <a href="../pdf-tools/jpg-to-pdf.html">JPG to PDF</a>
-        <a href="../pdf-tools/merge-pdf.html">Merge PDF</a>
-        <a href="../pdf-tools/split-pdf.html">Split PDF</a>
-        <a href="../pdf-tools/compress-pdf.html">Compress PDF</a>
-      </div>
-      <div>
-        <h4>Student &amp; QR</h4>
-        <a href="../student-tools/gpa-calculator.html">GPA Calculator</a>
-        <a href="../student-tools/cgpa-calculator.html">CGPA Calculator</a>
-        <a href="../student-tools/percentage-calculator.html">Percentage Calculator</a>
-        <a href="../student-tools/grade-calculator.html">Final Grade Calculator</a>
-        <a href="../student-tools/attendance-calculator.html">Attendance Calculator</a>
-        <a href="../student-tools/age-calculator.html">Age Calculator</a>
-        <a href="../student-tools/standard-deviation-calculator.html">Standard Deviation Calculator</a>
-        <a href="../student-tools/scientific-calculator.html">Scientific Calculator</a>
-        <a href="../qr-tools/qr-code-generator.html">QR Code Generator</a>
-      </div>
-      <div>
-        <h4>Company</h4>
-        <a href="../about.html">About</a>
+        <h4>Resources</h4>
         <a href="../guides/index.html">Guides</a>
+        <a href="../about.html">About</a>
         <a href="../contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
         <a href="../privacy-policy.html">Privacy Policy</a>
         <a href="../terms.html">Terms of Use</a>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <a href="https://github.com/heady2121/toolpeg-tools" target="_blank" rel="noopener">GitHub repo</a>
       </div>
       </div>
       <div class="footer-bottom">
         <span>&copy; <span data-year></span> Toolpeg. All tools run client-side in your browser.</span>
-        <a href="../privacy-policy.html">Privacy</a>
+        <a href="https://github.com/heady2121/toolpeg-tools" target="_blank" rel="noopener" class="gh-link"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 007.87 10.94c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.36-3.88-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.2 1.78 1.2 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>GitHub</a>
       </div>
     </div>
   </footer>
 
-<script src="../js/main.js"></script>
+<script src="../js/main.js?v=202611031215"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>if(window["pdfjsLib"]){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="../js/file-utils.js"></script>
+<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){
   const dz = document.getElementById('dz');

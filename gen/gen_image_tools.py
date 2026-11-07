@@ -50,16 +50,16 @@ def gen_format_convert(slug, from_fmt, to_fmt, to_mime, title, desc, accept, qua
         <input type="file" id="file-input" accept="{accept}" hidden>
         <div id="error" class="error-box"></div>
         <div id="preview-wrap" style="display:none;margin-top:18px">
-          <img id="preview" alt="Preview" style="border:1px solid var(--hairline);border-radius:6px;max-height:320px;width:auto;margin:0 auto">
+          <img id="preview" alt="Preview" style="border:1px solid var(--border);border-radius:6px;max-height:320px;width:auto;margin:0 auto">
         </div>
       </div>
       <div>
         <div class="panel">
           <div class="field">
             <label>Selected file</label>
-            <div id="file-info" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)">No file yet</div>
+            <div id="file-info" style="font-family:var(--font);font-size:13px;color:var(--text-muted)">No file yet</div>
           </div>{quality_field}
-          <button class="btn btn-signal btn-block" id="convert-btn" disabled>Convert to {to_fmt}</button>
+          <button class="btn btn-primary btn-block" id="convert-btn" disabled>Convert to {to_fmt}</button>
           <p class="note">{quality_note}Your image is decoded and re-encoded locally using the browser's canvas &mdash; it's never uploaded anywhere.</p>
         </div>
       </div>
@@ -67,7 +67,7 @@ def gen_format_convert(slug, from_fmt, to_fmt, to_mime, title, desc, accept, qua
   </div>
 </main>
 """
-    script = f"""<script src="../js/file-utils.js"></script>
+    script = f"""<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){{
   const dz = document.getElementById('dz');
@@ -169,14 +169,14 @@ def gen_compressor():
         <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden>
         <div id="error" class="error-box"></div>
         <div id="preview-wrap" style="display:none;margin-top:18px">
-          <img id="preview" alt="Preview" style="border:1px solid var(--hairline);border-radius:6px;max-height:320px;width:auto;margin:0 auto">
+          <img id="preview" alt="Preview" style="border:1px solid var(--border);border-radius:6px;max-height:320px;width:auto;margin:0 auto">
         </div>
       </div>
       <div>
         <div class="panel">
           <div class="field">
             <label>Selected file</label>
-            <div id="file-info" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)">No file yet</div>
+            <div id="file-info" style="font-family:var(--font);font-size:13px;color:var(--text-muted)">No file yet</div>
           </div>
           <div class="field">
             <label for="quality">Quality &mdash; <span id="qval">75</span>%</label>
@@ -187,7 +187,7 @@ def gen_compressor():
             <div class="big" id="est-size">&mdash;</div>
             <div class="sub" id="est-sub"></div>
           </div>
-          <button class="btn btn-signal btn-block" id="convert-btn" disabled>Compress &amp; download</button>
+          <button class="btn btn-primary btn-block" id="convert-btn" disabled>Compress &amp; download</button>
           <p class="note">Compression happens locally by re-encoding the image on a canvas &mdash; nothing is uploaded.</p>
         </div>
       </div>
@@ -195,7 +195,7 @@ def gen_compressor():
   </div>
 </main>
 """
-    script = """<script src="../js/file-utils.js"></script>
+    script = """<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){
   const dz = document.getElementById('dz');
@@ -306,14 +306,14 @@ def gen_resizer():
         <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden>
         <div id="error" class="error-box"></div>
         <div id="preview-wrap" style="display:none;margin-top:18px">
-          <img id="preview" alt="Preview" style="border:1px solid var(--hairline);border-radius:6px;max-height:320px;width:auto;margin:0 auto">
+          <img id="preview" alt="Preview" style="border:1px solid var(--border);border-radius:6px;max-height:320px;width:auto;margin:0 auto">
         </div>
       </div>
       <div>
         <div class="panel">
           <div class="field">
             <label>Selected file</label>
-            <div id="file-info" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)">No file yet</div>
+            <div id="file-info" style="font-family:var(--font);font-size:13px;color:var(--text-muted)">No file yet</div>
           </div>
           <div class="row">
             <div class="field">
@@ -328,7 +328,7 @@ def gen_resizer():
           <div class="field">
             <label><input type="checkbox" id="lock" checked style="width:auto;margin-right:8px">Lock aspect ratio</label>
           </div>
-          <button class="btn btn-signal btn-block" id="convert-btn" disabled>Resize &amp; download</button>
+          <button class="btn btn-primary btn-block" id="convert-btn" disabled>Resize &amp; download</button>
           <p class="note">Resizing redraws the image on a canvas at the new size locally &mdash; nothing is uploaded.</p>
         </div>
       </div>
@@ -336,7 +336,7 @@ def gen_resizer():
   </div>
 </main>
 """
-    script = """<script src="../js/file-utils.js"></script>
+    script = """<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){
   const dz = document.getElementById('dz');
@@ -455,9 +455,9 @@ def gen_cropper():
             </div>
             <div class="field">
               <label>Crop size</label>
-              <div id="cropdims" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)">&mdash;</div>
+              <div id="cropdims" style="font-family:var(--font);font-size:13px;color:var(--text-muted)">&mdash;</div>
             </div>
-            <button class="btn btn-signal btn-block" id="convert-btn">Crop &amp; download</button>
+            <button class="btn btn-primary btn-block" id="convert-btn">Crop &amp; download</button>
             <button class="btn btn-outline btn-block" id="reset-btn" style="margin-top:10px">Choose a different image</button>
             <p class="note">The crop is rendered on a canvas at full resolution before download &mdash; nothing is uploaded.</p>
           </div>
@@ -467,7 +467,7 @@ def gen_cropper():
   </div>
 </main>
 """
-    script = """<script src="../js/file-utils.js"></script>
+    script = """<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){
   const dz = document.getElementById('dz');

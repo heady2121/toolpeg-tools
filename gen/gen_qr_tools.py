@@ -51,9 +51,9 @@ def gen_qr():
         </div>
       </div>
       <div class="panel" style="text-align:center">
-        <div id="qr-canvas-wrap" style="display:inline-block;padding:16px;background:#fff;border:1px solid var(--hairline);border-radius:6px"></div>
+        <div id="qr-canvas-wrap" style="display:inline-block;padding:16px;background:#fff;border:1px solid var(--border);border-radius:6px"></div>
         <div id="error" class="error-box" style="text-align:left"></div>
-        <button class="btn btn-signal btn-block" id="download-btn" style="margin-top:18px">Download PNG</button>
+        <button class="btn btn-primary btn-block" id="download-btn" style="margin-top:18px">Download PNG</button>
         <p class="note">The QR code is generated locally in your browser and never sent anywhere.</p>
       </div>
     </div>
@@ -61,7 +61,7 @@ def gen_qr():
 </main>
 """
     script = f"""{QRLIB}
-<script src="../js/file-utils.js"></script>
+<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){{
   const qtype = document.getElementById('qtype');

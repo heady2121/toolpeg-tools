@@ -46,13 +46,13 @@ def gen_pdf_to_jpg():
     </div>
     <div id="results" class="tool-grid" style="margin-top:20px"></div>
     <div id="download-all-wrap" style="display:none;margin-top:16px">
-      <button class="btn btn-signal" id="download-all">Download all as JPGs</button>
+      <button class="btn btn-primary" id="download-all">Download all as JPGs</button>
     </div>
   </div>
 </main>
 """
     script = f"""{PDFJS}
-<script src="../js/file-utils.js"></script>
+<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){{
   const dz = document.getElementById('dz');
@@ -148,7 +148,7 @@ def gen_jpg_to_pdf():
         </div>
       </div>
       <div class="panel">
-        <button class="btn btn-signal btn-block" id="make-btn">Create PDF &amp; download</button>
+        <button class="btn btn-primary btn-block" id="make-btn">Create PDF &amp; download</button>
         <p class="note">Pages are added in the order listed above. Use the &uarr; / &darr; buttons to reorder.</p>
       </div>
     </div>
@@ -156,7 +156,7 @@ def gen_jpg_to_pdf():
 </main>
 """
     script = f"""{JSPDF}
-<script src="../js/file-utils.js"></script>
+<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){{
   const dz = document.getElementById('dz');
@@ -258,12 +258,12 @@ def gen_merge_pdf():
     <input type="file" id="file-input" accept="application/pdf" multiple hidden>
     <div id="error" class="error-box"></div>
     <div id="list" style="margin-top:18px"></div>
-    <button class="btn btn-signal" id="merge-btn" style="display:none;margin-top:16px">Merge &amp; download</button>
+    <button class="btn btn-primary" id="merge-btn" style="display:none;margin-top:16px">Merge &amp; download</button>
   </div>
 </main>
 """
     script = f"""{PDFLIB}
-<script src="../js/file-utils.js"></script>
+<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){{
   const dz = document.getElementById('dz');
@@ -348,7 +348,7 @@ def gen_split_pdf():
       <div class="panel">
         <div class="field">
           <label id="page-count-label">Loaded PDF</label>
-          <div id="page-count" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)"></div>
+          <div id="page-count" style="font-family:var(--font);font-size:13px;color:var(--text-muted)"></div>
         </div>
         <div class="field">
           <label for="mode">Mode</label>
@@ -363,7 +363,7 @@ def gen_split_pdf():
         </div>
       </div>
       <div class="panel">
-        <button class="btn btn-signal btn-block" id="split-btn">Split &amp; download</button>
+        <button class="btn btn-primary btn-block" id="split-btn">Split &amp; download</button>
         <p class="note">"Split into single-page files" downloads one PDF per page, one after another.</p>
       </div>
     </div>
@@ -371,7 +371,7 @@ def gen_split_pdf():
 </main>
 """
     script = f"""{PDFLIB}
-<script src="../js/file-utils.js"></script>
+<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){{
   const dz = document.getElementById('dz');
@@ -460,7 +460,7 @@ def gen_compress_pdf():
     <div class="tool-head">
       {tool_head('Optimize', 'Compress PDF', 'Shrink a PDF by re-rendering its pages at a quality you choose.')}
     </div>
-    <div class="error-box show" style="background:#F6FBFA;border-color:var(--circuit-tint-line);color:var(--circuit-dark)">
+    <div class="error-box show" style="background:#F6FBFA;border-color:var(--primary-tint-border);color:var(--primary-hover)">
       <strong>How this works:</strong> each page is re-rendered as an image and reassembled into a new PDF. This gets scanned and photo-heavy PDFs much smaller, but the output's text is no longer selectable or searchable. For a text document you need to keep searchable, this isn't the right tool.
     </div>
     <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload PDF" style="margin-top:18px">
@@ -474,7 +474,7 @@ def gen_compress_pdf():
       <div class="panel">
         <div class="field">
           <label>Loaded PDF</label>
-          <div id="file-info" style="font-family:var(--font-mono);font-size:13px;color:var(--steel)"></div>
+          <div id="file-info" style="font-family:var(--font);font-size:13px;color:var(--text-muted)"></div>
         </div>
         <div class="field">
           <label for="level">Compression level</label>
@@ -486,7 +486,7 @@ def gen_compress_pdf():
         </div>
       </div>
       <div class="panel">
-        <button class="btn btn-signal btn-block" id="compress-btn">Compress &amp; download</button>
+        <button class="btn btn-primary btn-block" id="compress-btn">Compress &amp; download</button>
         <div id="status" style="display:none;margin-top:14px">
           <div class="progress"><i id="bar"></i></div>
           <p class="note" id="status-text"></p>
@@ -503,7 +503,7 @@ def gen_compress_pdf():
 """
     script = f"""{PDFJS}
 {JSPDF}
-<script src="../js/file-utils.js"></script>
+<script src="../js/file-utils.js?v=202611031215"></script>
 <script>
 (function(){{
   const dz = document.getElementById('dz');

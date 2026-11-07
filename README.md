@@ -1,210 +1,61 @@
-# 🛠️ Toolpeg — Free Online Utility Tools
+# Toolpeg
 
-> **Simple. Fast. Free. Useful.**
+Free, browser-based tools for images, PDFs, QR codes and everyday student calculations — no sign-up, no file uploads, no watermark.
 
-**Toolpeg** is a free online utility platform designed to provide practical tools for calculations, conversions, productivity, and everyday digital tasks — all in one place.
+**Live site:** https://toolpegtools.vercel.app/
 
-🌐 **Live Demo:** https://toolpegtools.vercel.app/
+## What's here
 
----
+- **Image tools** — JPG↔PNG, JPG/PNG↔WebP, compressor, resizer, cropper
+- **PDF tools** — PDF→JPG, JPG→PDF, merge, split, compress
+- **Student tools** — GPA, CGPA, percentage, final grade, attendance, age, standard deviation, and a full scientific calculator
+- **QR tools** — QR code generator (link / text / Wi-Fi)
+- **Guides** — a few short articles supporting the tools above
 
-## ✨ Features
+Every tool runs entirely client-side: file conversion and compression use the browser's own Canvas API and a small set of open-source libraries (`pdf.js`, `pdf-lib`, `jsPDF`, `qrcodejs`) loaded from a CDN. Nothing is uploaded to a server.
 
-Toolpeg currently includes a growing collection of free online tools:
+## Tech stack
 
-| Tool                          | Description                                                 |
-| ----------------------------- | ----------------------------------------------------------- |
-| 🧮 **Scientific Calculator**  | Perform advanced mathematical calculations                  |
-| 📊 **Percentage Calculator**  | Quickly calculate percentages and percentage changes        |
-| 🎓 **CPI Calculator**         | Calculate CPI based on academic results                     |
-| 📱 **QR Code Generator**      | Generate QR codes quickly and easily                        |
-| 🖼️ **Banner & Format Tools** | Work with common digital image/banner formats               |
-| 👤 **User Signup**            | Create an account for the platform                          |
-| 📱 **Responsive Interface**   | Designed to work across desktop, tablet, and mobile devices |
+Plain HTML, CSS and JavaScript. No framework, no build step, no bundler. The site is static and can be hosted anywhere (currently on Vercel).
 
-> 🚀 New tools and improvements are continuously being added.
+## Project structure
 
----
-
-## 🎯 Why Toolpeg?
-
-Instead of searching for a separate website for every small task, Toolpeg aims to provide useful utilities from a **single, simple platform**.
-
-The project focuses on:
-
-* ⚡ Fast and simple user experience
-* 🎨 Clean and accessible interface
-* 📱 Mobile-friendly design
-* 🧰 Practical everyday tools
-* 🌐 Free access
-* 🚀 Continuous improvement
-
----
-
-## 🛠️ Tech Stack
-
-Toolpeg is built using modern web-development technologies.
-
-* **HTML5** — Page structure
-* **CSS3** — Styling and responsive design
-* **JavaScript** — Application functionality
-* **Vercel** — Hosting and deployment
-* **Git** — Version control
-* **GitHub** — Source code management
-
----
-
-## 📂 Project Structure
-
-```text
+```
 toolpeg-website/
-│
-├── public/
-│   └── ...
-│
-├── src/
-│   └── ...
-│
-├── package.json
-├── README.md
-└── ...
+├── css/style.css         # design system (light + dark mode via CSS variables)
+├── js/
+│   ├── main.js            # nav drawer, dark-mode toggle, footer year
+│   ├── search.js          # homepage tool search/filter
+│   └── file-utils.js       # shared helpers for the image/PDF tools
+├── gen/                   # Python scripts that generate every HTML page
+│   └── site_lib.py         # shared header/footer/card templates + tool registry
+├── image-tools/, pdf-tools/, student-tools/, qr-tools/   # tool pages
+├── guides/                # supporting articles
+├── index.html, about.html, contact.html, privacy-policy.html, terms.html, 404.html
+├── sitemap.xml, robots.txt
+└── og-image.png           # social-share preview image
 ```
 
----
+## Regenerating the site
 
-## 🚀 Getting Started
-
-Want to run Toolpeg locally?
-
-### Prerequisites
-
-Make sure you have installed:
-
-* [Node.js](https://nodejs.org/)
-* npm
-* Git
-
-### 1. Clone the repository
+The HTML pages aren't hand-written — they're produced by the Python scripts in `gen/`, so header, footer, navigation and per-tool SEO content (About/FAQ/related tools) stay consistent across every page. To rebuild everything after editing `gen/site_lib.py` or any `gen/gen_*.py` file:
 
 ```bash
-git clone https://github.com/heady2121/toolpeg-tools.git
+cd gen
+python3 gen_pages.py
+python3 gen_image_tools.py
+python3 gen_pdf_tools.py
+python3 gen_student_tools.py
+python3 gen_qr_tools.py
+python3 gen_guides.py
 ```
 
-### 2. Open the project
+This overwrites the HTML files in place. There's no `npm install` or dev server required to run the site itself — it's static files you can open directly or deploy as-is.
 
-```bash
-cd toolpeg-tools
-```
+## Status
 
-### 3. Install dependencies
+Actively developed personal/portfolio project. Not affiliated with any company; there's no user account system, no backend, and no data collection beyond standard analytics/ad-network cookies (see the privacy policy).
 
-```bash
-npm install
-```
+## License
 
-### 4. Start the development server
-
-```bash
-npm run dev
-```
-
-The development server will provide a local URL, usually similar to:
-
-```text
-http://localhost:5173
-```
-
----
-
-## 🌍 Live Demo
-
-Experience Toolpeg online:
-
-👉 **https://toolpegtools.vercel.app/**
-
----
-
-## 📸 Screenshots
-
-Screenshots will be added as the platform continues to evolve.
-
-### Homepage
-
-> Add a screenshot of your Toolpeg homepage here.
-
-### Tools
-
-> Add screenshots of individual tools here.
-
----
-
-## 🗺️ Roadmap
-
-Toolpeg is an ongoing project.
-
-### 🔜 Planned Improvements
-
-* [ ] 🔎 Tool search functionality
-* [ ] 🗂️ Tool categories
-* [ ] 🌙 Dark mode
-* [ ] 🌐 Multi-language support
-* [ ] 📱 Further mobile optimization
-* [ ] ⚡ Performance improvements
-* [ ] 🔐 Improved authentication
-* [ ] 🔎 SEO optimization
-* [ ] 📊 Additional calculators
-* [ ] 🔄 More conversion tools
-* [ ] 🧰 Additional productivity utilities
-
----
-
-## 📈 Project Goals
-
-The long-term goal of Toolpeg is to develop a reliable collection of free online utilities that users can access without installing additional software.
-
-The platform will continue to grow by adding useful tools based on real-world needs and user feedback.
-
----
-
-## 👨‍💻 Developer
-
-### Abdul Hadi
-
-**Computer Science Student | Web Developer | AI & Automation Enthusiast**
-
-Interested in:
-
-* 💻 Web Development
-* ⚛️ Modern JavaScript Development
-* 🤖 AI & Automation
-* 🔧 Software Development
-* 🌐 Digital Products
-
-**GitHub:**
-https://github.com/heady2121
-
----
-
-## 🤝 Contributing
-
-Toolpeg is currently a personal portfolio and learning project.
-
-Suggestions, ideas, and constructive feedback are welcome as the platform continues to develop.
-
----
-
-## 📄 License
-
-This project is currently developed as a personal portfolio and learning project.
-
----
-
-## ⭐ Support the Project
-
-If you find Toolpeg useful, consider giving the repository a ⭐ on GitHub.
-
-Every star and piece of feedback helps motivate further development.
-
----
-
-**Built by Abdul Hadi**
+No license file yet — all rights reserved by default until one is added.
