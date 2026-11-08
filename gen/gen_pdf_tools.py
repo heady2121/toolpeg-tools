@@ -240,7 +240,7 @@ def gen_jpg_to_pdf():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="JPG to PDF Converter &mdash; Combine Images into a PDF | Toolpeg",
+        title="JPG to PDF Converter Online &mdash; Combine Images Free | Toolpeg",
         description="Combine one or more JPG or PNG images into a single PDF document, free and in your browser.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="pdf", body=body, slug=slug, foot_scripts=script))
 
@@ -327,7 +327,7 @@ def gen_merge_pdf():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="Merge PDF &mdash; Combine PDF Files Free | Toolpeg",
+        title="Merge PDF Online &mdash; Combine PDF Files Free | Toolpeg",
         description="Combine multiple PDF files into one document, in the order you choose, free and in your browser.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="pdf", body=body, slug=slug, foot_scripts=script))
 
@@ -450,7 +450,7 @@ def gen_split_pdf():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="Split PDF &mdash; Extract or Split PDF Pages Free | Toolpeg",
+        title="Split PDF Online &mdash; Extract PDF Pages Free | Toolpeg",
         description="Extract a page range from a PDF, or split every page into its own file, free and in your browser.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="pdf", body=body, slug=slug, foot_scripts=script))
 
@@ -717,7 +717,7 @@ def gen_compress_pdf():
               '\n<script src="../js/file-utils.js?v=202611031215"></script>\n<script>\n' +
               COMPRESS_JS + "\n</script>\n")
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="Compress PDF &mdash; Shrink PDF File Size Free | Toolpeg",
+        title="Compress PDF Online &mdash; Shrink PDF File Size Free | Toolpeg",
         description="Shrink a PDF's file size free in your browser. Keep text searchable by recompressing embedded images, or rasterize pages for the smallest file.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="pdf", body=body, slug=slug, foot_scripts=script))
 
