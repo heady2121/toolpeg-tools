@@ -126,7 +126,7 @@ def gen_gpa():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="GPA Calculator &mdash; Free Semester GPA Calculator | Toolpeg",
+        title="GPA Calculator Online &mdash; Free Semester GPA | Toolpeg",
         description="Calculate your semester GPA by entering course credits and letter grades. Supports 4.0 and 4.3 scales.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="student", body=body, slug=slug, foot_scripts=script))
 
@@ -298,7 +298,7 @@ def gen_age():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="Age Calculator &mdash; Exact Age in Years, Months, Days | Toolpeg",
+        title="Age Calculator Online &mdash; Years, Months &amp; Days | Toolpeg",
         description="Calculate exact age in years, months and days from a birth date, as of today or any date you choose.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="student", body=body, slug=slug, foot_scripts=script))
 
@@ -597,7 +597,7 @@ def gen_cgpa():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="CGPA Calculator &mdash; Free Cumulative GPA Calculator | Toolpeg",
+        title="CGPA Calculator Online &mdash; Free Cumulative GPA | Toolpeg",
         description="Calculate your cumulative GPA (CGPA) across multiple semesters, weighted correctly by credit hours.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="student", body=body, slug=slug, foot_scripts=script))
 
@@ -681,7 +681,7 @@ def gen_grade():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="Final Grade Calculator &mdash; Weighted Grade Calculator | Toolpeg",
+        title="Final Grade Calculator Online &mdash; Weighted Grades | Toolpeg",
         description="Calculate your overall course grade from weighted categories like homework, exams and participation.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="student", body=body, slug=slug, foot_scripts=script))
 
