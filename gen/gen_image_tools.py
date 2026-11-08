@@ -163,7 +163,7 @@ def gen_compressor():
       <div>
         <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload image">
           {DZ_SVG}
-          <h3>Drop a JPG or PNG here, or click to browse</h3>
+          <h3>Drop a JPG, PNG or WebP here, or click to browse</h3>
           <p>JPG / PNG / WEBP &middot; processed on your device</p>
         </div>
         <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden>
@@ -280,8 +280,8 @@ def gen_compressor():
 </script>
 """
     html = TOOL_PAGE(
-        title="Image Compressor &mdash; Shrink JPG/PNG File Size Free | Toolpeg",
-        description="Compress JPG or PNG images with a live quality slider and size estimate. Free, no upload, works in your browser.",
+        title="Image Compressor Online &mdash; Shrink Image Size Free | Toolpeg",
+        description="Compress JPG, PNG or WebP images with a live quality slider and size estimate. Free, no upload, works in your browser.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="image", body=body, slug=slug, foot_scripts=script,
     )
     write(os.path.join(ROOT, FOLDER, slug), html)
@@ -403,7 +403,7 @@ def gen_resizer():
 </script>
 """
     html = TOOL_PAGE(
-        title="Image Resizer &mdash; Resize Photos to Exact Pixels Free | Toolpeg",
+        title="Image Resizer Online &mdash; Resize Photos Free | Toolpeg",
         description="Resize JPG, PNG or WebP images to an exact width and height or lock the aspect ratio. Free, no upload required.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="image", body=body, slug=slug, foot_scripts=script,
     )
