@@ -152,7 +152,7 @@ def gen_qr():
 </script>
 """
     write(os.path.join(ROOT, FOLDER, slug), TOOL_PAGE(
-        title="QR Code Generator &mdash; Free, No Sign-up | Toolpeg",
+        title="QR Code Generator Online &mdash; Free, No Sign-up | Toolpeg",
         description="Generate a QR code for a link, plain text, or a Wi-Fi login and download it as a PNG, free and in your browser.",
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active="qr", body=body, slug=slug, foot_scripts=script))
 
