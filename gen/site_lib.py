@@ -6,13 +6,17 @@ TOOLS registry so nav, footer, homepage cards, category pages, related-tool
 links and on-page SEO content can never drift out of sync with each other.
 """
 
+from tool_content import CONTENT, STYLE as TOOL_CONTENT_STYLE
 import html as _html
 import json
 import re
 from urllib.parse import urljoin
 
 SITE_NAME = "Toolpeg"
+# Change this ONE line when you move to your own domain (canonical, og:image and structured data all use it).
 SITE_DOMAIN = "https://toolpegtools.vercel.app"
+# Keep False until an ad network approves the site, so visitors and reviewers never see an empty "Ad space" box.
+SHOW_AD_SLOTS = False
 
 CATEGORY_INFO = {
     "image-tools": {"label": "Image Tools", "nav_key": "image"},
@@ -450,6 +454,14 @@ def _extra_seo_block(slug):
     </div>
   </section>
 """ if cards else ""
+    ad_slot_html = ('''      <div class="ad-slot" aria-hidden="true">
+        <span>Ad space</span>
+        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
+      </div>
+''' if SHOW_AD_SLOTS else "")
+    content = CONTENT.get(slug, "")
+    content_html = (f'      <div class="prose tool-content" style="max-width:720px">\n{TOOL_CONTENT_STYLE}{content}\n      </div>\n'
+                    if content else "")
     return f"""
   <section class="section tool-extra-section">
     <div class="wrap">
@@ -457,7 +469,7 @@ def _extra_seo_block(slug):
         <h2 style="margin-top:0">About this tool</h2>
         <p>{tool['about']}</p>
       </div>
-      <div class="how-it-works">
+{content_html}      <div class="how-it-works">
         <h2>How it works</h2>
         <ol class="steps-list">
             {steps_html}
@@ -467,11 +479,7 @@ def _extra_seo_block(slug):
         <h2>Frequently asked questions</h2>
           {faq_html}
       </div>
-      <div class="ad-slot" aria-hidden="true">
-        <span>Ad space</span>
-        <!-- Once you're approved by an ad network, paste its script/ad-unit tag here. -->
-      </div>
-    </div>
+{ad_slot_html}    </div>
   </section>
 {related_section}"""
 
