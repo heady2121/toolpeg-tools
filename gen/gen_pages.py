@@ -211,7 +211,7 @@ def gen_home():
     script = """<script src="js/search.js?v=202611031215"></script>\n"""
     html = PAGE(
         title="Toolpeg — Free Image, PDF & Student Tools (No Sign-up)",
-        description="Free browser-based tools: JPG/PNG/WebP converters, image compressor and resizer, merge/split/compress PDF, GPA and CGPA calculators, QR code generator, and more.",
+        description="Free browser-based tools: JPG/PNG/WebP converters, image compressor and resizer, merge/split/compress PDF, GPA and CGPA calculators, and a QR code generator.",
         canonical_path="",
         depth="",
         active="home",
@@ -342,7 +342,9 @@ def gen_privacy():
       <h2>Information we collect</h2>
       <p>Like most websites, we may use cookies and similar technology, third-party analytics, and advertising partners to understand aggregate traffic and to display ads. These services may collect information such as your IP address, browser type, and pages visited.</p>
       <h2>Advertising</h2>
-      <p>This site may show ads served by third-party advertising networks, including header-bidding networks that run a real-time auction among multiple ad buyers for each ad slot. Those networks and buyers may use cookies, device identifiers, or similar technology to personalize the ads you see, and may collect information such as approximate location or interest data for that purpose. You can control cookie preferences through your browser settings.</p>
+      <p>This site uses, or may in future use, Google AdSense to show ads. Third-party vendors, including Google, use cookies to serve ads based on a visitor&rsquo;s previous visits to this site or other sites. Google&rsquo;s use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the internet.</p>
+      <p>You can opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ads Settings</a>, or opt out of some third-party vendors&rsquo; use of cookies for personalized advertising at <a href="https://www.aboutads.info" target="_blank" rel="noopener">aboutads.info</a>. To learn how Google uses data from sites that use its services, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites or apps that use our services</a>.</p>
+      <p>Visitors in the European Economic Area, the United Kingdom and Switzerland may be shown a consent message before personalized ads are served, and can change that choice at any time. Other ad networks, if we add any, may also use cookies or similar technology for the same purposes, and their own privacy policies apply to that data.</p>
       <h2>Third-party links</h2>
       <p>This site may link to third-party sites. We aren't responsible for the content or privacy practices of those sites.</p>
       <h2>Your choices</h2>
