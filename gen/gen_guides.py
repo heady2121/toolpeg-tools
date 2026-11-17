@@ -116,7 +116,7 @@ def gen_compress_guide():
 </main>
 """
     write(os.path.join(ROOT, FOLDER, slug), PAGE(
-        title=f"{title} | Toolpeg Guides",
+        title="Compress Images Without Losing Quality | Toolpeg Guides",
         description=desc,
         canonical_path=f"{FOLDER}/{slug}", depth=DEPTH, active=None, body=body))
 
